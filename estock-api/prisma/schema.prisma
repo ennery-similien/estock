@@ -1,0 +1,142 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("MYSQL_DB_URL")
+}
+
+enum Role {
+    SALESMAN
+    ADMIN
+}
+
+enum AddressType {
+    RESIDENCIAL
+    COMMERCIAL
+}
+
+enum PhoneType {
+    RESIDENCIAL
+    COMMERCIAL
+}
+
+enum OrderStatus {
+    PENDING
+    CONFIRMED
+    DISPACHED
+    DELIVERED
+}
+
+model Product {
+    id          Int             @id @default(autoincrement())   @map("PRO_ID")
+    barcode     String          @unique                         @map("PRO_CODE")
+    title       String          @db.VarChar(255)                @map("PRO_TITLE")
+    description String          @db.LongText                    @map("PRO_DESCRIPTION")
+    category    String          @db.VarChar(50)                 @map("PRO_CATEGORY")
+    subcategory String?         @db.VarChar(50)                 @map("PRO_SUBCAT")
+    brand       String          @db.VarChar(50)                 @map("PRO_BRAND")
+    model       String          @db.VarChar(50)                 @map("PRO_MODEL")
+    stock       Int             @db.Int                         @map("PRO_STOCK")
+    properties  Json            @db.Json                        @map("PRO_PROPER")
+    createdAt   DateTime        @default(now())                 @map("PRO_REG_DATE")
+    updatedAt   DateTime        @updatedAt                      @map("PRO_UPD_DATE")
+    orders      OrderItem[]
+
+    @@map("products")
+}
+
+model Order {
+    id          Int             @id @default(autoincrement())   @map("ORD_ID")
+    code        String          @unique  @default(uuid())       @map("ORD_CODE")
+    sellerNiu   String          @db.VarChar(10)                 @map("ORD_SELLER")
+    clientNiu   String          @db.VarChar(10)                 @map("ORD_CLIENT")
+    total       Float           @db.Double                      @map("ORD_TOTAL")
+    econimy     Float           @db.Double @default(0.00)       @map("ORD_DISCOUNT")
+    shipAddress Int                                             @map("ORD_SHIP_ADDR")
+    status      OrderStatus     @default(PENDING)               @map("ORD_STATUS")
+    createdAt   DateTime        @default(now())                 @map("ORD_REG_DATE")
+    products    OrderItem[]
+    seller      User            @relation(fields: [sellerNiu], references: [niu], map: "USER_ORDER_FK")
+    client      Client          @relation(fields: [clientNiu], references: [niu], map: "CLIENT_ORDER_FK")
+    address     Address         @relation(fields: [shipAddress], references: [id], map: "ADDRESS_ORDER_FK")
+
+    @@map("orders")
+}
+
+model OrderItem {
+    productId   Int                                             @map("PRO_ID")
+    orderId     Int                                             @map("ORD_ID")
+    discount    Float           @db.Double @default(0.00)       @map("ORD_ITEM_DISCOUNT")
+    order       Order           @relation(fields: [orderId], references: [id], map: "ORDER_ITEM_ITEM_FK")
+    product     Product         @relation(fields: [productId], references: [id], map: "ODER_ITEM_PRODUCT_FK")
+
+    @@id([orderId, productId])
+    @@map("order_items")
+}
+
+model User {
+    id          Int             @id @default(autoincrement())   @map("USR_ID")
+    niu         String          @db.VarChar(10)     @unique     @map("USR_LOGIN")
+    firstname   String          @db.VarChar(50)                 @map("USR_FNAME")
+    lastname    String          @db.VarChar(50)                 @map("USR_LNAME")
+    birthday    DateTime        @db.Date                        @map("USR_BIRTHDAY")
+    email       String          @db.VarChar(100)    @unique     @map("USR_EMAIL")
+    password    String          @db.VarChar(100)                @map("USR_PASSWORD")
+    role        Role            @default(SALESMAN)              @map("USR_ROLE")
+    telephones  Telephone[]
+    addresses   Address[]
+    orders      Order[]
+    isActive    Boolean         @default(false)                 @map("USR_STATUS")
+    createdAt   DateTime        @default(now())                 @map("USR_REG_DATE")
+    updatedAt   DateTime        @updatedAt                      @map("USR_UPD_DATE")
+
+    @@map("users")
+}
+
+model Client {
+    id          Int         @id @default(autoincrement())   @map("CLI_ID")
+    niu         String      @db.VarChar(10)     @unique     @map("CLI_NIU")
+    fullname    String      @db.VarChar(100)                @map("CLI_NAME")
+    birthday    DateTime?   @db.Date                        @map("CLI_BIRTHDAY")
+    email       String?     @db.VarChar(100)    @unique     @map("CLI_EMAIL")
+    telephones  Telephone[]
+    addresses   Address[]
+    orders      Order[]
+    createdAt   DateTime    @default(now())                 @map("CLI_REG_DATE")
+    updatedAt   DateTime    @updatedAt                      @map("CLI_UPD_DATE")
+
+    @@map("clients")
+}
+
+model Address {
+    id          Int             @id @default(autoincrement())   @map("ADR_ID")
+    address     String          @db.VarChar(100)                @map("ADR_DESC")
+    zip         String          @db.VarChar(10)                 @map("ADR_ZIP")
+    city        String          @db.VarChar(50)                 @map("ADR_CITY")
+    state       String          @db.VarChar(50)                 @map("ADR_STATE")
+    complement  String          @db.VarChar(255)                @map("ADR_DETAIL")
+    type        AddressType     @default(RESIDENCIAL)           @map("ADR_TYPE")
+    niu         String?         @db.VarChar(10)                 @map("ADR_OWNER")
+    isPrimary   Boolean         @default(false)                 @map("ADR_PRIMARY")
+    orders      Order[]
+    user        User?           @relation(fields:[niu], references: [niu], map: "USER_ADDRESSES_FK", onDelete: NoAction, onUpdate: Cascade)
+    client      Client?         @relation(fields:[niu], references: [niu], map: "CLIENT_ADDRESSES_FK", onDelete: NoAction, onUpdate: Cascade)
+
+    @@map("addresses")
+}
+
+model Telephone {
+    id          Int             @id @default(autoincrement())   @map("TEL_ID")
+    numero      String          @db.VarChar(8)                  @map("TEL_NUM")
+    type        PhoneType       @default(RESIDENCIAL)           @map("TEL_TYPE")
+    niu         String?         @db.VarChar(10)                 @map("TEL_OWNER")
+    user        User?           @relation(fields:[niu], references: [niu], map: "USER_TELEPHONES_FK", onDelete: NoAction, onUpdate: Cascade)
+    client      Client?         @relation(fields:[niu], references: [niu], map: "CLIENT_TELEPHONES_FK", onDelete: NoAction, onUpdate: Cascade)
+
+    @@map("telephones")
+}

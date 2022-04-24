@@ -1,2 +1,5 @@
-/.idea/
+
 /estock-api/node_modules/
+.dockerignore
+.gitignore
+.idea
