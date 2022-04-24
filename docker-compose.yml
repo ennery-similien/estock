@@ -1,0 +1,27 @@
+version: '3.3'
+
+services:
+  mongo_db:
+    container_name: mongo_db_container
+    image: mongo:latest
+    restart: always
+    volumes:
+      - mongo_db:/data/db
+    ports:
+      - 27017:27017
+  msql_db:
+    container_name: mysql_db_container
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: estock
+    volumes:
+      - mysql_db:/data/db
+    ports:
+      - 3306:3306
+
+volumes:
+  mongo_db:
+  mysql_db:
