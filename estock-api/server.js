@@ -12,7 +12,7 @@ app.use(error);
 const server = app.listen(process.env.SERVER_PORT);
 
 const prettyPrismaErrorMessage = function (error){
-    return `[${error.code ? 'PrismaClientKnownRequestError' : 'PrismaClientInitializationError'}]`
+    return `[${error.code ? 'PrismaClientKnownRequestError' : 'PrismaClientInitializationError'}] `
         .concat(error.message.substring(
         error.message.lastIndexOf('\n') + 1
     ))
