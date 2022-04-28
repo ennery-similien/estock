@@ -1,16 +1,30 @@
-//const {DBConnection} = require(__dirname.concat('/app'))
-const Response = require('../output/Response')
+const Response = require('../output/Response');
+const {mysqlBdConnection} = require('../../database');
 
 class UserDataProvider{
-    static createUser(user){
-        // const createdUser = await DBConnection.user.create({
-        //     user
-        // })
-        //
-        // if(!createdUser)
-        //     new Error('An error occured, user not created')
+    static async createUser(user){
+        const createdUser = await mysqlBdConnection.user.create({
+            data: {
+                ...user,
+                telephones:{
+                    create: user.telephones.map(phone => ({
+                            telephone: {create: phone}
+                        }))
+                },
+                adrresses:{
+                    create: user.addresses.map(address => ({
+                        address: {create: address}
+                    }))
+                }
+            }
+        });
 
-        return new Response(200, "User created successful", user)
+        console.log(createdUser);
+
+        if(!createdUser)
+            new Error('An error occurred, user not created')
+
+        return new Response(200, "User created successful", createdUser)
     }
 
 }

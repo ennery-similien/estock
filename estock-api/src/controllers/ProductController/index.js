@@ -1,4 +1,4 @@
-const CreateProductUseCase = require("../../usecases/CreateProductUseCase");
+const CreateProductUseCase = require("../../usecases/product/CreateProductUseCase");
 
 class ProductController {
     static createProduct(request, response, next)

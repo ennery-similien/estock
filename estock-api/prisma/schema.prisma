@@ -86,12 +86,13 @@ model User {
     lastname    String          @db.VarChar(50)                 @map("USR_LNAME")
     birthday    DateTime        @db.Date                        @map("USR_BIRTHDAY")
     email       String          @db.VarChar(100)    @unique     @map("USR_EMAIL")
-    password    String          @db.VarChar(100)                @map("USR_PASSWORD")
+    password    String          @db.VarChar(170)                @map("USR_PASSWORD")
     role        Role            @default(SALESMAN)              @map("USR_ROLE")
     telephones  Telephone[]
     addresses   Address[]
     orders      Order[]
     isActive    Boolean         @default(false)                 @map("USR_STATUS")
+    initDay     DateTime?       @db.DateTime                    @map("USR_INIT_DAY")
     createdAt   DateTime        @default(now())                 @map("USR_REG_DATE")
     updatedAt   DateTime        @updatedAt                      @map("USR_UPD_DATE")
 
@@ -116,10 +117,10 @@ model Client {
 model Address {
     id          Int             @id @default(autoincrement())   @map("ADR_ID")
     address     String          @db.VarChar(100)                @map("ADR_DESC")
-    zip         String          @db.VarChar(10)                 @map("ADR_ZIP")
+    zip         String?         @db.VarChar(10)                 @map("ADR_ZIP")
     city        String          @db.VarChar(50)                 @map("ADR_CITY")
     state       String          @db.VarChar(50)                 @map("ADR_STATE")
-    complement  String          @db.VarChar(255)                @map("ADR_DETAIL")
+    complement  String?         @db.VarChar(255)                @map("ADR_DETAIL")
     type        AddressType     @default(RESIDENCIAL)           @map("ADR_TYPE")
     niu         String?         @db.VarChar(10)                 @map("ADR_OWNER")
     isPrimary   Boolean         @default(false)                 @map("ADR_PRIMARY")

@@ -17,6 +17,7 @@
     "http-errors": "^2.0.0",
     "mongoose": "^6.3.0",
     "morgan": "^1.10.0",
+    "password-hash": "^1.2.2",
     "pino": "^7.10.0",
     "pino-pretty": "^7.6.1"
   },

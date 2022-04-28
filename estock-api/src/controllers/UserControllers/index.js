@@ -1,10 +1,10 @@
-const CreateUserUseCase = require('../../usecases/CreateUserUseCase')
+const CreateUserUseCase = require('../../usecases/user/CreateUserUseCase')
 
 class UserControllers
 {
-    static createUser(user)
+    static createUser(request, response, next)
     {
-        return CreateUserUseCase.process(user)
+        response.send(CreateUserUseCase.process(request.body));
     }
 
     static getUserById(userId)

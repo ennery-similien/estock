@@ -1,4 +1,4 @@
-const {isObjectEmpty} = require('../../../utilities');
+const {isObjectEmpty} = require('../../../../utilities');
 
 class CreateProductUseCase {
 
