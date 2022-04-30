@@ -12,17 +12,18 @@ app.use(error);
 const server = app.listen(process.env.SERVER_PORT);
 
 
-const prettyPrismaErrorMessage = function (error){
-    return `[${error.code ? 'PrismaClientKnownRequestError' : 'PrismaClientInitializationError'}] `
-        .concat(error.message.substring(
-        error.message.lastIndexOf('\n') + 1
-    ))
-}
-mysqlBdConnection.user.findMany({}).then(result => {
-    console.log(result)
-}).catch(error => {
-    logger.error(prettyPrismaErrorMessage(error))
-})
+// const prettyPrismaErrorMessage = function (error){
+//     return `[${error.code ? 'PrismaClientKnownRequestError' : 'PrismaClientInitializationError'}] `
+//         .concat(error.message.substring(
+//         error.message.lastIndexOf('\n') + 1
+//     ))
+// }
+// // mysqlBdConnection.user.findMany({}).then(result => {
+// //     console.log(result)
+// // }).catch(error => {
+// //     logger.error(prettyPrismaErrorMessage(error))
+// // })
+
 
 if(server.listening)
 {
@@ -39,7 +40,7 @@ if(server.listening)
     });
 
     mysqlBdConnection.$on('query', (query) => {
-        logger.info(query.query)
+        //logger.info(query.query)
     })
 
     mysqlBdConnection.$on('info', (info) => {

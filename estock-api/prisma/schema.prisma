@@ -16,12 +16,12 @@ enum Role {
 }
 
 enum AddressType {
-    RESIDENCIAL
+    RESIDENTIAL
     COMMERCIAL
 }
 
 enum PhoneType {
-    RESIDENCIAL
+    RESIDENTIAL
     COMMERCIAL
 }
 
@@ -34,7 +34,7 @@ enum OrderStatus {
 
 model Product {
     id          Int             @id @default(autoincrement())   @map("PRO_ID")
-    barcode     String          @unique                         @map("PRO_CODE")
+    barcode     String                                          @map("PRO_CODE") @unique(map: "PRO_BARCODE_UNIQUE_INDEX")
     title       String          @db.VarChar(255)                @map("PRO_TITLE")
     description String          @db.LongText                    @map("PRO_DESCRIPTION")
     category    String          @db.VarChar(50)                 @map("PRO_CATEGORY")
@@ -52,7 +52,7 @@ model Product {
 
 model Order {
     id          Int             @id @default(autoincrement())   @map("ORD_ID")
-    code        String          @unique  @default(uuid())       @map("ORD_CODE")
+    code        String          @default(uuid())                @map("ORD_CODE") @unique(map: "ORD_CODE_UNIQUE_INDEX")
     sellerNiu   String          @db.VarChar(10)                 @map("ORD_SELLER")
     clientNiu   String          @db.VarChar(10)                 @map("ORD_CLIENT")
     total       Float           @db.Double                      @map("ORD_TOTAL")
@@ -81,11 +81,11 @@ model OrderItem {
 
 model User {
     id          Int             @id @default(autoincrement())   @map("USR_ID")
-    niu         String          @db.VarChar(10)     @unique     @map("USR_LOGIN")
+    niu         String          @db.VarChar(10)                 @map("USR_LOGIN") @unique(map:"USR_NIU_UNIQUE_INDEX")
     firstname   String          @db.VarChar(50)                 @map("USR_FNAME")
     lastname    String          @db.VarChar(50)                 @map("USR_LNAME")
     birthday    DateTime        @db.Date                        @map("USR_BIRTHDAY")
-    email       String          @db.VarChar(100)    @unique     @map("USR_EMAIL")
+    email       String          @db.VarChar(100)                @map("USR_EMAIL") @unique(map:"USR_EMAIL_UNIQUE_INDEX")
     password    String          @db.VarChar(170)                @map("USR_PASSWORD")
     role        Role            @default(SALESMAN)              @map("USR_ROLE")
     telephones  Telephone[]
@@ -101,10 +101,10 @@ model User {
 
 model Client {
     id          Int         @id @default(autoincrement())   @map("CLI_ID")
-    niu         String      @db.VarChar(10)     @unique     @map("CLI_NIU")
+    niu         String      @db.VarChar(10)                 @map("CLI_NIU") @unique(map:"CLI_NIU_UNIQUE_INDEX")
     fullname    String      @db.VarChar(100)                @map("CLI_NAME")
     birthday    DateTime?   @db.Date                        @map("CLI_BIRTHDAY")
-    email       String?     @db.VarChar(100)    @unique     @map("CLI_EMAIL")
+    email       String?     @db.VarChar(100)                @map("CLI_EMAIL")  @unique(map:"CLI_EMAIL_UNIQUE_INDEX")
     telephones  Telephone[]
     addresses   Address[]
     orders      Order[]
@@ -116,28 +116,30 @@ model Client {
 
 model Address {
     id          Int             @id @default(autoincrement())   @map("ADR_ID")
-    address     String          @db.VarChar(100)                @map("ADR_DESC")
+    addressLine String          @db.VarChar(100)                @map("ADR_DESC")
     zip         String?         @db.VarChar(10)                 @map("ADR_ZIP")
     city        String          @db.VarChar(50)                 @map("ADR_CITY")
     state       String          @db.VarChar(50)                 @map("ADR_STATE")
     complement  String?         @db.VarChar(255)                @map("ADR_DETAIL")
-    type        AddressType     @default(RESIDENCIAL)           @map("ADR_TYPE")
-    niu         String?         @db.VarChar(10)                 @map("ADR_OWNER")
+    type        AddressType     @default(RESIDENTIAL)           @map("ADR_TYPE")
+    userId      Int?                                            @map("ADR_USR_ID")
+    clientId    Int?                                            @map("ADR_CLI_ID")
     isPrimary   Boolean         @default(false)                 @map("ADR_PRIMARY")
     orders      Order[]
-    user        User?           @relation(fields:[niu], references: [niu], map: "USER_ADDRESSES_FK", onDelete: NoAction, onUpdate: Cascade)
-    client      Client?         @relation(fields:[niu], references: [niu], map: "CLIENT_ADDRESSES_FK", onDelete: NoAction, onUpdate: Cascade)
+    user        User?           @relation(fields:[userId], references: [id], map: "USER_ADDRESSES_FK", onDelete: NoAction, onUpdate: Cascade)
+    client      Client?         @relation(fields:[clientId], references: [id], map: "CLIENT_ADDRESSES_FK", onDelete: NoAction, onUpdate: Cascade)
 
     @@map("addresses")
 }
 
 model Telephone {
     id          Int             @id @default(autoincrement())   @map("TEL_ID")
-    numero      String          @db.VarChar(8)                  @map("TEL_NUM")
-    type        PhoneType       @default(RESIDENCIAL)           @map("TEL_TYPE")
-    niu         String?         @db.VarChar(10)                 @map("TEL_OWNER")
-    user        User?           @relation(fields:[niu], references: [niu], map: "USER_TELEPHONES_FK", onDelete: NoAction, onUpdate: Cascade)
-    client      Client?         @relation(fields:[niu], references: [niu], map: "CLIENT_TELEPHONES_FK", onDelete: NoAction, onUpdate: Cascade)
+    number      String          @db.VarChar(8)                  @map("TEL_NUM")
+    type        PhoneType       @default(RESIDENTIAL)           @map("TEL_TYPE")
+    userId      Int?                                            @map("TEL_USR_ID")
+    clientId    Int?                                            @map("TEL_CLI_ID")
+    user        User?           @relation(fields:[userId], references: [id], map: "USER_TELEPHONES_FK", onDelete: NoAction, onUpdate: Cascade)
+    client      Client?         @relation(fields:[clientId], references: [id], map: "CLIENT_TELEPHONES_FK", onDelete: NoAction, onUpdate: Cascade)
 
     @@map("telephones")
 }

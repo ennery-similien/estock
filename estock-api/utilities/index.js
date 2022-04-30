@@ -1,5 +1,8 @@
 const DateUtils = require("./DateUtils");
-const {REGEX_EMAIL} = require("./constants");
+const {REGEX_EMAIL, REGEX_HUMAN_NAME, REGEX_ALPHA_NUM, REGEX_SAME_DIGITS, REGEX_ALPHA, REGEX_NUMERIC} = require("./constants");
+
+const Regexp = (regex) => new RegExp(regex);
+
 module.exports = {
     isObjectEmpty(object)
     {
@@ -9,23 +12,22 @@ module.exports = {
     },
     isNumeric(text)
     {
-        return text && text.match(/^[0-9]+$/);
+        return (text && Regexp(REGEX_NUMERIC).test(text));
     },
     isAlpha(text){
-        return text && text.toUpperCase().match(/^[A-Z]+$/m);
+        return (text && Regexp(REGEX_ALPHA).test(text.toUpperCase()));
     },
     isAlphaNum(text)
     {
-        return text && text.toUpperCase().match(/^[A-Z0-9]+$/m);
+        return (text && Regexp(REGEX_ALPHA_NUM).test(text.toUpperCase()));
     },
     isHumanName(text)
     {
-        return text && text.toUpperCase().match(/^(?=.{3,50}$)[A-Z]+(?:[.-\\s][A-Z]*)*$/)
+        return (text && Regexp(REGEX_HUMAN_NAME).test(text.toUpperCase()));
     },
     isSameDigitSequence(text)
-    {const regex = new RegExp(/(.)\1+/);
-        console.log(text, text.match(regex))
-        return text && text.match(/^([0-9])\1*$/)
+    {
+        return Regexp(REGEX_SAME_DIGITS).test(text);
     },
     isAdult(date)
     {
@@ -36,6 +38,7 @@ module.exports = {
     },
     isEmail(text)
     {
-        return text && text.toLowerCase().match(REGEX_EMAIL);
-    }
+        return text && Regexp(REGEX_EMAIL).test(text.toLowerCase());
+    },
+    Regexp
 }

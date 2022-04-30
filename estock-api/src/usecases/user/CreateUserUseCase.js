@@ -1,26 +1,25 @@
-const UserDataProvider = require("../../../dataproviders/UserDataProvider");
-const {isHumanName, isNumeric, isSameDigitSequence, isAdult, isEmail} = require('../../../../utilities');
-const DateUtils = require("../../../../utilities/DateUtils");
-const {REGEX_PASSWORD, PASSWORD_OPTIONS} = require("../../../../utilities/constants");
-const {Role, PhoneType, AddressType} = require("../../../../utilities/enumerations");
+const UserDataProvider = require("../../dataproviders/UserDataProvider");
+const {isHumanName, isNumeric, isSameDigitSequence, isAdult, isEmail, Regexp} = require('../../../utilities');
+const DateUtils = require("../../../utilities/DateUtils");
+const {REGEX_PASSWORD, PASSWORD_OPTIONS} = require("../../../utilities/constants");
+const {Role, AddressType, PhoneType} = require("../../../utilities/enumerations");
 const passwordHash = require('password-hash');
 
 class CreateUserUseCase {
 
-    static process(user)
-    {
+    static process(user) {
         user.birthday = new Date(user.birthday);
 
         CreateUserUseCase.#validateUser(user);
 
-        if(!user.role)
+        if (!user.role)
             user.role = Role.SALESMAN;
 
         CreateUserUseCase.#setUserPasswordHash(user);
 
         user.isActive = false;
 
-        return UserDataProvider.createUser(user)
+        return UserDataProvider.createUser(user);
     }
 
     static #setUserPasswordHash(user)
@@ -49,9 +48,9 @@ class CreateUserUseCase {
     {
         if(!niu  || !isNumeric(niu) || niu.length !== 10)
             throw new Error('Invalid Unique Identity Number, must be only digit[0-9]');
-        console.log(isSameDigitSequence(niu))
+
         if(isSameDigitSequence(niu))
-            throw new Error('Invalid sequence');
+            throw new Error('Invalid NIU sequence');
 
         //TODO orther verifications here
     }
@@ -61,7 +60,7 @@ class CreateUserUseCase {
         if(!firstname || !isHumanName(firstname))
             throw new Error('Incorrect user firstname');
 
-        if(!firstname || !isHumanName(lastname))
+        if(!lastname || !isHumanName(lastname))
             throw new Error('Incorrect user lastname');
     }
 
@@ -82,17 +81,17 @@ class CreateUserUseCase {
 
     static #checkPassword(password)
     {
-        if(!password || password.length < 10 || !password.match(REGEX_PASSWORD))
+        if(!password || password.length < 10 || !Regexp(REGEX_PASSWORD).test(password))
             throw new Error('Password must contain 10-15 characters, at least 1 uppercase, one lowercase, 1 number and 1 special character');
     }
 
     static #checkTelephones(telephones)
     {
-        if(telephones.size() <= 0)
+        if(telephones.length <= 0)
             throw new Error('User must contain at least one telephone');
 
         telephones.forEach(phone => {
-            if(phone.number.length < 8 || !isNumeric(phone.number))
+            if(phone.number.length !== 8 || !isNumeric(phone.number))
                 throw new Error('Invalid phone number, must contain 8 digits');
 
             if(!phone.type)
@@ -102,12 +101,12 @@ class CreateUserUseCase {
 
     static #checkAddresses(addresses)
     {
-        if(addresses.size() <= 0)
+        if(addresses.length <= 0)
             throw new Error('User must contain at least one address');
 
         addresses.forEach(address => {
 
-            if(!address.address || !address.city || !address.state)
+            if(!address.addressLine || !address.city || !address.state)
                 throw new Error('Invalid address, please enter a correct address');
 
             if(!address.type)

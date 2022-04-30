@@ -4,12 +4,12 @@ const Role = {
 };
 const AddressType = {
     RESIDENTIAL: 'RESIDENTIAL',
-    COMMERCIAL: 'COMMERCIAL'
+    COMMERCIAL: 'COMMERCIAL',
 };
 
 const PhoneType = {
     RESIDENTIAL: 'RESIDENTIAL',
-    COMMERCIAL: 'COMMERCIAL'
+    COMMERCIAL: 'COMMERCIAL',
 };
 
 const OrderStatus = {
