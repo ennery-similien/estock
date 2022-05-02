@@ -1,5 +1,5 @@
 const router = require('../router')
-const ProductController = require("../../controllers/ProductController");
+const ProductController = require("../../controllers/product");
 
 router.post('/product/create', ProductController.createProduct)
 router.get('/product/get/:productId', ProductController.getProductById)

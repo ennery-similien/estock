@@ -51,32 +51,6 @@ class UserDataProvider
         });
     }
 
-    static async deleteUserById(userId)
-    {
-        return await mysqlBdConnection.user.delete({
-            where: {
-                id: userId
-            },
-            include: {
-                telephones: true,
-                addresses: true
-            }
-        });
-    }
-
-    static async deleteUserByNIU(userNIU)
-    {
-        return await mysqlBdConnection.user.delete({
-            where: {
-                niU : userNIU
-            },
-            include: {
-                telephones: true,
-                addresses: true
-            }
-        });
-    }
-
     static async updateUserById(userId, data)
     {
         return await mysqlBdConnection.user.update({
@@ -100,21 +74,34 @@ class UserDataProvider
     static async getAllUser(regex)
     {
         return await mysqlBdConnection.user.findMany({
-            include:{
-                telephones: true,
-                addresses: true,
-                orders:{
-                    include:{
-                        products:{
-                            include:{
-                                product:true
-                            }
-                        }
-                    }
-                }
-            }
+            ...regex,
+            // include:{
+            //     telephones: true,
+            //     addresses: true,
+            // }
         });
     }
+
+    // static async getAllUser(regex)
+    // {
+    //     return await mysqlBdConnection.user.findMany({
+    //         include:{
+    //             telephones: true,
+    //             addresses: true,
+    //             orders:{
+    //                 include:{
+    //                     address:true,
+    //                     products:{
+    //                         include:{
+    //                             product:true
+    //                         }
+    //                     },
+    //                     client: true
+    //                 }
+    //             }
+    //         }
+    //     });
+    // }
 }
 
 

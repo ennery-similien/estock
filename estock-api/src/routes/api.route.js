@@ -1,6 +1,6 @@
 const router = require('./router')
-require('./UserRoutes')
-require('./ProductRoutes')
+require('./user')
+require('./product')
 
 
 module.exports = router

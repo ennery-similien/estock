@@ -1,22 +1,25 @@
-const CreateUserUseCase = require('../../usecases/user/CreateUserUseCase');
-const DeleteUserUseCase = require('../../usecases/user/DeleteUserUseCase');
-const UpdateUserByIdUseCase = require('../../usecases/user/UpdateUserByIdUseCase');
+const {
+    CreateUserUseCase,
+    GetUserByIdUseCase,
+    GetUserByNiuUseCase,
+    GetAllUserUseCase,
+    UpdateUserByIdUseCase,
+    UpdateUserByNiuUseCase
+} = require('../../usecases');
 
 const Index = require("../../../utilities/enumIndex");
+const Response = require('../../output/Response');
 const {error401} = require("../../../utilities/errorUtil");
-const Response = require('../../output/Response')
-
 const {CODE_200, SUCCESS_MESSAGE, MANY_401_MESSAGE} = require('../../../utilities/constants');
 
-const UserDataProvider = require("../../dataproviders/UserDataProvider");
-const GetAllUserUseCase = require("../../usecases/user/GetAllUserUseCase");
-
-class UserControllers
+class UserController
 {
     static createUser(request, response, next)
     {
         CreateUserUseCase.process(request.body)
-            .then(createdUser => response.send(createdUser))
+            .then(createdUser =>{
+                response.send(new Response(CODE_200, SUCCESS_MESSAGE('Create user'),createdUser));
+            })
             .catch (error => {
                 if(error.meta.target === Index.USR_NIU_UNIQUE_INDEX)
                     next(new Error('User\'s NIU already exists'));
@@ -29,36 +32,32 @@ class UserControllers
     static getUserById(request, response, next)
     {
         const userId = Number.parseInt(request.params.userId);
-        UserDataProvider.getUserById(userId)
+        GetUserByIdUseCase.process(userId)
             .then(user => {
-                if(user)
-                    response.send(user)
+                if(user !== null)
+                    response.send(new Response(CODE_200, SUCCESS_MESSAGE('Get user'), user));
                 else
                     next(error401(`User [id: ${userId}]`));
-
             });
     }
 
-    static getUserByNIU(request, response, next)
+    static getUserByNiu(request, response, next)
     {
         const userNIU = request.params.userNIU;
-        UserDataProvider.getUserByNIU(userNIU)
+        GetUserByNiuUseCase.process(userNIU)
             .then(user => {
-                if(user)
-                    response.send(user)
+                if(user !== null)
+                    response.send(new Response(CODE_200, SUCCESS_MESSAGE('Get user'), user));
                 else
                     next(error401(`User [NIU: ${userNIU}]`));
-
             });
     }
 
     static getAll(request, response, next)
     {
-        const regex = request.query.params;
-
-        GetAllUserUseCase.process(regex)
+        GetAllUserUseCase.process(request.query)
             .then(users => {
-                let message = SUCCESS_MESSAGE('Get');
+                let message = SUCCESS_MESSAGE('Get users');
 
                 if(users.length <= 0)
                     message = MANY_401_MESSAGE('users');
@@ -66,21 +65,19 @@ class UserControllers
                 response.send(new Response(CODE_200, message, users))
             })
             .catch(error => {
-                console.log(error);
+                next(error);
             })
     }
 
-    //static getAllByRegex(regex){ }
-
-    static updateUser(request, response, next)
+    static updateUserById(request, response, next)
     {
         const userId = request.params.userId;
         const data = request.body;
 
-        UpdateUserByIdUseCase.process(userId, data)
+        UpdateUserByIdUseCase.process(userId, data, next)
             .then(updatedUser => {
                 response.send(
-                    new Response(200, 'User updated successfully', updatedUser)
+                    new Response(CODE_200, SUCCESS_MESSAGE('Update user'), updatedUser)
                 );
             })
             .catch(error => {
@@ -88,20 +85,20 @@ class UserControllers
             })
     }
 
-    //static updateAllByRegex(regex, data){}
-
-    static deleteUser(request, response, next){
-
-        DeleteUserUseCase.process(request.params.userId)
-            .then(deletedUser => {
-                response.send(new Response(200, 'User deleted successfully', deletedUser));
+    static updateUserByNiu(request, response, next)
+    {
+        const userNiu = request.params.userNiu;
+        const data = request.body;
+        UpdateUserByNiuUseCase.process(userNiu, data, next)
+            .then(updatedUser => {
+                response.send(
+                    new Response(CODE_200, SUCCESS_MESSAGE('Update user'), updatedUser)
+                );
             })
             .catch(error => {
-                console.log(error);
+                next(error);
             })
     }
-
-    //static deleteAllByRegex(regex){}
 }
 
-module.exports = UserControllers
+module.exports = UserController

@@ -1,25 +1,39 @@
 const UserDataProvider = require("../../dataproviders/UserDataProvider");
+const {isObjectEmpty} = require("../../../utilities");
 
 class UpdateUserByIdUseCase {
-    static process(userId, data)
+    static process(userId, data, callback)
     {
-        UpdateUserByIdUseCase.checkUserId(userId);
-        UpdateUserByIdUseCase.checkUserExists(userId);
+        const id = Number.parseInt(userId);
 
-        return UserDataProvider.updateUserById(userId, data);
+        UpdateUserByIdUseCase.#checkUserId(id);
+        UpdateUserByIdUseCase.#checkUserExists(id, callback);
+        UpdateUserByIdUseCase.#checkData(data);
+
+        return UserDataProvider.updateUserById(id, data);
     }
 
-    static checkUserId(userId)
+    static #checkUserId(userId)
     {
         if(isNaN(Number.parseInt(userId)))
             throw new Error('Invalid user id');
     }
 
-    static checkUserExists(userId)
+    static #checkUserExists(userId, callback)
     {
-        if(!UserDataProvider.getUserById(userId))
-            throw new Error('User does not exist');
+        UserDataProvider.getUserById(Number.parseInt(userId))
+            .then(user => {
+                user === null && callback(new Error('User does not exist'));
+            })
+
     }
+
+    static #checkData(data)
+    {
+        if(isObjectEmpty(data))
+            throw new Error('Cannot update user with empty data');
+    }
+
 }
 
 module.exports = UpdateUserByIdUseCase;

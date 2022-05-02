@@ -40,7 +40,7 @@ if(server.listening)
     });
 
     mysqlBdConnection.$on('query', (query) => {
-        //logger.info(query.query)
+        logger.info(query.query);
     })
 
     mysqlBdConnection.$on('info', (info) => {

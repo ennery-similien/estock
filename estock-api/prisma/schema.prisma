@@ -34,7 +34,7 @@ enum OrderStatus {
 
 model Product {
     id          Int             @id @default(autoincrement())   @map("PRO_ID")
-    barcode     String                                          @map("PRO_CODE") @unique(map: "PRO_BARCODE_UNIQUE_INDEX")
+    barcode     String          @db.VarChar(13)                 @map("PRO_CODE") @unique(map: "PRO_BARCODE_UNIQUE_INDEX")
     title       String          @db.VarChar(255)                @map("PRO_TITLE")
     description String          @db.LongText                    @map("PRO_DESCRIPTION")
     category    String          @db.VarChar(50)                 @map("PRO_CATEGORY")
@@ -42,9 +42,10 @@ model Product {
     brand       String          @db.VarChar(50)                 @map("PRO_BRAND")
     model       String          @db.VarChar(50)                 @map("PRO_MODEL")
     stock       Int             @db.Int                         @map("PRO_STOCK")
+    price       Float           @db.Double @default(1.00)       @map("PRO_PRICE")
     properties  Json            @db.Json                        @map("PRO_PROPER")
     createdAt   DateTime        @default(now())                 @map("PRO_REG_DATE")
-    updatedAt   DateTime        @updatedAt                      @map("PRO_UPD_DATE")
+    updatedAt   DateTime?       @updatedAt                      @map("PRO_UPD_DATE")
     orders      OrderItem[]
 
     @@map("products")
@@ -53,15 +54,16 @@ model Product {
 model Order {
     id          Int             @id @default(autoincrement())   @map("ORD_ID")
     code        String          @default(uuid())                @map("ORD_CODE") @unique(map: "ORD_CODE_UNIQUE_INDEX")
-    sellerNiu   String          @db.VarChar(10)                 @map("ORD_SELLER")
+    userNiu     String          @db.VarChar(10)                 @map("ORD_SELLER")
     clientNiu   String          @db.VarChar(10)                 @map("ORD_CLIENT")
     total       Float           @db.Double                      @map("ORD_TOTAL")
     econimy     Float           @db.Double @default(0.00)       @map("ORD_DISCOUNT")
-    shipAddress Int                                             @map("ORD_SHIP_ADDR")
+    shipAddress Int             @db.Int                         @map("ORD_SHIP_ADDR")
     status      OrderStatus     @default(PENDING)               @map("ORD_STATUS")
     createdAt   DateTime        @default(now())                 @map("ORD_REG_DATE")
+    updatedAt   DateTime?       @db.DateTime                    @map("ORD_UPD_DATE")
     products    OrderItem[]
-    seller      User            @relation(fields: [sellerNiu], references: [niu], map: "USER_ORDER_FK")
+    seller      User            @relation(fields: [userNiu], references: [niu], map: "USER_ORDER_FK")
     client      Client          @relation(fields: [clientNiu], references: [niu], map: "CLIENT_ORDER_FK")
     address     Address         @relation(fields: [shipAddress], references: [id], map: "ADDRESS_ORDER_FK")
 
@@ -69,8 +71,8 @@ model Order {
 }
 
 model OrderItem {
-    productId   Int                                             @map("PRO_ID")
-    orderId     Int                                             @map("ORD_ID")
+    productId   Int             @db.Int                         @map("PRO_ID")
+    orderId     Int             @db.Int                         @map("ORD_ID")
     discount    Float           @db.Double @default(0.00)       @map("ORD_ITEM_DISCOUNT")
     order       Order           @relation(fields: [orderId], references: [id], map: "ORDER_ITEM_ITEM_FK")
     product     Product         @relation(fields: [productId], references: [id], map: "ODER_ITEM_PRODUCT_FK")
@@ -88,13 +90,14 @@ model User {
     email       String          @db.VarChar(100)                @map("USR_EMAIL") @unique(map:"USR_EMAIL_UNIQUE_INDEX")
     password    String          @db.VarChar(170)                @map("USR_PASSWORD")
     role        Role            @default(SALESMAN)              @map("USR_ROLE")
+    isActive    Boolean         @default(false)                 @map("USR_IS_ACTIVE")
+    isOnline    Boolean         @default(false)                 @map("USR_STATUS")
+    initDay     DateTime?       @db.DateTime                    @map("USR_INIT_DAY")
+    createdAt   DateTime        @default(now())                 @map("USR_REG_DATE")
+    updatedAt   DateTime?       @updatedAt                      @map("USR_UPD_DATE")
     telephones  Telephone[]
     addresses   Address[]
     orders      Order[]
-    isActive    Boolean         @default(false)                 @map("USR_STATUS")
-    initDay     DateTime?       @db.DateTime                    @map("USR_INIT_DAY")
-    createdAt   DateTime        @default(now())                 @map("USR_REG_DATE")
-    updatedAt   DateTime        @updatedAt                      @map("USR_UPD_DATE")
 
     @@map("users")
 }
@@ -105,11 +108,11 @@ model Client {
     fullname    String      @db.VarChar(100)                @map("CLI_NAME")
     birthday    DateTime?   @db.Date                        @map("CLI_BIRTHDAY")
     email       String?     @db.VarChar(100)                @map("CLI_EMAIL")  @unique(map:"CLI_EMAIL_UNIQUE_INDEX")
+    createdAt   DateTime    @default(now())                 @map("CLI_REG_DATE")
+    updatedAt   DateTime?   @updatedAt                      @map("CLI_UPD_DATE")
     telephones  Telephone[]
     addresses   Address[]
     orders      Order[]
-    createdAt   DateTime    @default(now())                 @map("CLI_REG_DATE")
-    updatedAt   DateTime    @updatedAt                      @map("CLI_UPD_DATE")
 
     @@map("clients")
 }
@@ -122,12 +125,14 @@ model Address {
     state       String          @db.VarChar(50)                 @map("ADR_STATE")
     complement  String?         @db.VarChar(255)                @map("ADR_DETAIL")
     type        AddressType     @default(RESIDENTIAL)           @map("ADR_TYPE")
-    userId      Int?                                            @map("ADR_USR_ID")
-    clientId    Int?                                            @map("ADR_CLI_ID")
+    userNiu     String?         @db.VarChar(10)                 @map("ADR_USR_NIU")
+    clientNiu   String?         @db.VarChar(10)                 @map("ADR_CLI_NIU")
     isPrimary   Boolean         @default(false)                 @map("ADR_PRIMARY")
+    createdAt   DateTime        @default(now())                 @map("ADR_REG_DATE")
+    updatedAt   DateTime?       @db.DateTime                    @map("ADR_UPD_DATE")
     orders      Order[]
-    user        User?           @relation(fields:[userId], references: [id], map: "USER_ADDRESSES_FK", onDelete: NoAction, onUpdate: Cascade)
-    client      Client?         @relation(fields:[clientId], references: [id], map: "CLIENT_ADDRESSES_FK", onDelete: NoAction, onUpdate: Cascade)
+    user        User?           @relation(fields:[userNiu], references: [niu], map: "USER_ADDRESSES_FK", onDelete: NoAction, onUpdate: Cascade)
+    client      Client?         @relation(fields:[clientNiu], references: [niu], map: "CLIENT_ADDRESSES_FK", onDelete: NoAction, onUpdate: Cascade)
 
     @@map("addresses")
 }
@@ -136,10 +141,12 @@ model Telephone {
     id          Int             @id @default(autoincrement())   @map("TEL_ID")
     number      String          @db.VarChar(8)                  @map("TEL_NUM")
     type        PhoneType       @default(RESIDENTIAL)           @map("TEL_TYPE")
-    userId      Int?                                            @map("TEL_USR_ID")
-    clientId    Int?                                            @map("TEL_CLI_ID")
-    user        User?           @relation(fields:[userId], references: [id], map: "USER_TELEPHONES_FK", onDelete: NoAction, onUpdate: Cascade)
-    client      Client?         @relation(fields:[clientId], references: [id], map: "CLIENT_TELEPHONES_FK", onDelete: NoAction, onUpdate: Cascade)
+    userNiu     String?         @db.VarChar(10)                 @map("TEL_USR_NIU")
+    clientNiu   String?         @db.VarChar(10)                 @map("TEL_CLI_NIU")
+    createdAt   DateTime        @default(now())                 @map("TEL_REG_DATE")
+    updatedAt   DateTime?       @db.DateTime                    @map("TEL_UPD_DATE")
+    user        User?           @relation(fields:[userNiu], references: [niu], map: "USER_TELEPHONES_FK", onDelete: NoAction, onUpdate: Cascade)
+    client      Client?         @relation(fields:[clientNiu], references: [niu], map: "CLIENT_TELEPHONES_FK", onDelete: NoAction, onUpdate: Cascade)
 
     @@map("telephones")
 }
