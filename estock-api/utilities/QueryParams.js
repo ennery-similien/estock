@@ -2,7 +2,8 @@ const Params = require("./Params");
 
 class QueryParams
 {
-    queryParams = new Params();
+        queryParams = new Params();
+        conjunction = 'AND';
 
     static builder() {
         return new QueryParams()
@@ -32,16 +33,23 @@ class QueryParams
         return this;
     }
 
-    where(where, connectivity){
+    where(where){
 
-        if(connectivity.toUpperCase() === 'OR')
+        if(this.#getConjunction() === 'OR')
             this.queryParams.where = {OR: this.#generateWhere(where)};
 
-        else if(connectivity.toUpperCase() === 'NOT')
+        else if(this.#getConjunction() === 'NOT')
             this.queryParams.where = {NOT: this.#generateWhere(where)};
 
         else
             this.queryParams.where = {AND: this.#generateWhere(where)};
+
+        return this;
+    }
+
+    whereConjunctions(conjunction)
+    {
+        this.conjunction  = conjunction.toUpperCase();
 
         return this;
     }
@@ -51,6 +59,10 @@ class QueryParams
         return this.queryParams;
     }
 
+    #getConjunction()
+    {
+        return this.conjunction;
+    }
 
     #generateWhere(where) {
         const conditions = where.trim().split('|').map(function (condition) {

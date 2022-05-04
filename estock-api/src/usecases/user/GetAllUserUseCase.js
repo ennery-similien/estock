@@ -10,7 +10,8 @@ class GetAllUserUseCase
             .take(params.take)
             .orderBy(params.orderBy)
             .having(params.having)
-            .where(params.where, params.whereCon)
+            .whereConjunctions(params.conjunction)
+            .where(params.where)
             .build();
 
         return UserDataProvider.getAllUser(regex);
