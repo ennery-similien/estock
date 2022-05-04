@@ -25,3 +25,8 @@ services:
 volumes:
   mongo_db:
   mysql_db:
+
+networks:
+  default:
+    external:
+      name: estocknetwork
