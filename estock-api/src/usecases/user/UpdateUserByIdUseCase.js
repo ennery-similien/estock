@@ -1,4 +1,4 @@
-const UserDataProvider = require("../../dataproviders/UserDataProvider");
+const {UserDataProvider} = require("../../dataproviders");
 const {isObjectEmpty} = require("../../../utilities");
 
 class UpdateUserByIdUseCase {

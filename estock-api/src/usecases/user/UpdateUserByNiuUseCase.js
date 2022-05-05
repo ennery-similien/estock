@@ -1,5 +1,6 @@
 const {isNumeric, isObjectEmpty} = require("../../../utilities");
-const UserDataProvider = require("../../dataproviders/UserDataProvider");
+const {UserDataProvider} = require("../../dataproviders");
+
 class UpdateUserByNiuUseCase {
 
     static async process(userNiu, data, next)

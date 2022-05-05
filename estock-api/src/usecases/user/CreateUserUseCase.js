@@ -1,4 +1,4 @@
-const UserDataProvider = require("../../dataproviders/UserDataProvider");
+const {UserDataProvider} = require("../../dataproviders");
 const {isHumanName, isNumeric, isSameDigitSequence, isAdult, isEmail, Regexp} = require('../../../utilities');
 const DateUtils = require("../../../utilities/DateUtils");
 const {REGEX_PASSWORD, PASSWORD_OPTIONS} = require("../../../utilities/constants");
