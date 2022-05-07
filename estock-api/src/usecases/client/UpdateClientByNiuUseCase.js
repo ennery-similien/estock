@@ -1,31 +1,19 @@
-const {isNumeric, isObjectEmpty} = require("../../../utilities");
+const {isObjectEmpty} = require("../../../utilities");
 const {ClientDataProvider} = require("../../dataproviders");
+const {clientExistsOnNiu} = require("../helper");
+const {validateNiu} = require("../../../utilities/validator");
 class UpdateClientByNiuUseCase {
 
     static async process(clientNiu, data, callback)
     {
-        UpdateClientByNiuUseCase.#checkClientNiu(clientNiu);
-        UpdateClientByNiuUseCase.#checkClientExists(clientNiu, callback);
+        validateNiu(clientNiu);
+
+        if(!await clientExistsOnNiu(clientNiu))
+            callback(new Error('Client does not exist'));
+
         UpdateClientByNiuUseCase.#checkData(data);
 
-        return ClientDataProvider.updateClientByNIU(clientNiu, data);
-    }
-
-    static #checkClientNiu(clientNiu)
-    {
-        if(!clientNiu || !isNumeric(clientNiu))
-            throw new Error('Client Unique Identity must be a number');
-
-        if(clientNiu.length !== 10)
-            throw new Error('Client Unique Identity Number must contain 10 digits');
-    }
-
-    static #checkClientExists(clientNiu, callback){
-        ClientDataProvider.getClientByNIU(clientNiu)
-            .then((client) => {
-                if(client === null)
-                    callback(new Error('Client does not exist'))
-            })
+        return ClientDataProvider.updateClientByNiu(clientNiu, data);
     }
 
     static #checkData(data)

@@ -1,32 +1,20 @@
-const {isNumeric, isObjectEmpty} = require("../../../utilities");
+const {isObjectEmpty} = require("../../../utilities");
 const {UserDataProvider} = require("../../dataproviders");
+const {userExistsOnNiu} = require("../helper");
+const {validateNiu} = require("../../../utilities/validator");
 
 class UpdateUserByNiuUseCase {
 
-    static async process(userNiu, data, next)
+    static async process(userNiu, data, callback)
     {
-        UpdateUserByNiuUseCase.#checkUserNiu(userNiu);
-        UpdateUserByNiuUseCase.#checkUserExists(userNiu, next);
+        validateNiu(userNiu);
+
+        if(await userExistsOnNiu(userNiu))
+            callback(new Error('User does not exist'));
+
         UpdateUserByNiuUseCase.#checkData(data);
 
-        return UserDataProvider.updateUserByNIU(userNiu, data);
-    }
-
-    static #checkUserNiu(userNiu)
-    {
-        if(!userNiu || !isNumeric(userNiu))
-            throw new Error('User Unique Identity must be a number');
-
-        if(userNiu.length !== 10)
-            throw new Error('User Unique Identity Number must contain 10 digits');
-    }
-
-    static #checkUserExists(userNiu, next){
-        UserDataProvider.getUserByNIU(userNiu)
-            .then((user) => {
-                if(user === null)
-                    next(new Error('User does not exist'))
-            })
+        return UserDataProvider.updateUserByNiu(userNiu, data);
     }
 
     static #checkData(data)

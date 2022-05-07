@@ -19,6 +19,15 @@ const GetAllClientUseCase = require('./client/GetAllClientUseCase');
 const UpdateClientByIdUseCase = require('./client/UpdateClientByIdUseCase');
 const UpdateClientByNiuUseCase = require('./client/UpdateClientByNiuUseCase');
 
+/**
+ * @description All address use case
+ */
+
+const CreateAddressUseCase = require('./address/CreateAddressUseCase');
+const GetAllAddressUseCase = require('./address/GetAllAddressUseCase');
+const GetAddressByNiuUseCase = require('./address/GetAddressByNiuUseCase');
+const UpdateAddressByIdUseCase = require('./address/UpdateAddressByIdUseCase');
+
 
 module.exports = {
     CreateUserUseCase,
@@ -32,5 +41,9 @@ module.exports = {
     GetClientByNiuUseCase,
     GetAllClientUseCase,
     UpdateClientByIdUseCase,
-    UpdateClientByNiuUseCase
+    UpdateClientByNiuUseCase,
+    CreateAddressUseCase,
+    GetAddressByNiuUseCase,
+    GetAllAddressUseCase,
+    UpdateAddressByIdUseCase
 }

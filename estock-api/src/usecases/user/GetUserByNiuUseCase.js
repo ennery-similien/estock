@@ -7,7 +7,7 @@ class GetUserByNiuUseCase {
     {
         GetUserByNiuUseCase.#checkUserNiu(userNiu);
 
-        return UserDataProvider.getUserByNIU(userNiu);
+        return UserDataProvider.getUserByNiu(userNiu);
     }
 
     static #checkUserNiu(userNiu)

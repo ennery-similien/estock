@@ -1,13 +1,16 @@
 const {ClientDataProvider} = require("../../dataproviders");
 const {isObjectEmpty} = require("../../../utilities");
+const {clientExistsOnId} = require("../helper");
 
 class UpdateClientByIdUseCase {
-    static process(userId, data, callback)
-    {
+    static async process(userId, data, callback) {
         const id = Number.parseInt(userId);
 
         UpdateClientByIdUseCase.#checkUserId(id);
-        UpdateClientByIdUseCase.#checkUserExists(id, callback);
+
+        if (!await clientExistsOnId(id))
+            callback(new Error('Client does not exist'));
+
         UpdateClientByIdUseCase.#checkData(data);
 
         return ClientDataProvider.updateClientById(id, data);
@@ -15,17 +18,8 @@ class UpdateClientByIdUseCase {
 
     static #checkUserId(userId)
     {
-        if(isNaN(Number.parseInt(userId)))
+        if(isNaN(userId))
             throw new Error('Invalid client id');
-    }
-
-    static #checkUserExists(userId, callback)
-    {
-        ClientDataProvider.getClientById(Number.parseInt(userId))
-            .then(user => {
-                user === null && callback(new Error('Client does not exist'));
-            })
-
     }
 
     static #checkData(data)

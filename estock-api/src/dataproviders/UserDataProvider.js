@@ -38,7 +38,7 @@ class UserDataProvider
         });
     }
 
-    static getUserByNIU(userNIU)
+    static getUserByNiu(userNIU)
     {
         return mysqlBdConnection.user.findUnique({
             where : {
@@ -61,7 +61,7 @@ class UserDataProvider
         });
     }
 
-    static async updateUserByNIU(userNIU, data)
+    static async updateUserByNiu(userNIU, data)
     {
         return await mysqlBdConnection.user.update({
             data,

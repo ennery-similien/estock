@@ -30,12 +30,6 @@ class QueryParams
         return this;
     }
 
-    having(having){
-        this.queryParams.having = having;
-
-        return this;
-    }
-
     where(where){
         if(where) {
             if (this.#getConjunction() === 'OR')

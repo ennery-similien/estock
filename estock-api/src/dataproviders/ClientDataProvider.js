@@ -38,7 +38,7 @@ class ClientDataProvider
         });
     }
 
-    static getClientByNIU(clientNIU)
+    static getClientByNiu(clientNIU)
     {
         return mysqlBdConnection.client.findUnique({
             where : {
@@ -61,7 +61,7 @@ class ClientDataProvider
         });
     }
 
-    static async updateClientByNIU(clientNIU, data)
+    static async updateClientByNiu(clientNIU, data)
     {
         return await mysqlBdConnection.client.update({
             data,

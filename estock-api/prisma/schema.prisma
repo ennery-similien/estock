@@ -120,7 +120,7 @@ model Client {
 
 model Address {
     id          Int             @id @default(autoincrement())   @map("ADR_ID")
-    addressLine String          @db.VarChar(100)                @map("ADR_DESC")
+    address     String          @db.VarChar(100)                @map("ADR_DESC")
     zip         String?         @db.VarChar(10)                 @map("ADR_ZIP")
     city        String          @db.VarChar(50)                 @map("ADR_CITY")
     state       String          @db.VarChar(50)                 @map("ADR_STATE")
