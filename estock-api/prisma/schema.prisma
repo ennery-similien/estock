@@ -45,7 +45,7 @@ model Product {
     price       Float           @db.Double @default(1.00)       @map("PRO_PRICE")
     properties  Json            @db.Json                        @map("PRO_PROPER")
     createdAt   DateTime        @default(now())                 @map("PRO_REG_DATE")
-    updatedAt   DateTime?       @updatedAt                      @map("PRO_UPD_DATE")
+    updatedAt   DateTime?       @db.DateTime   @updatedAt       @map("PRO_UPD_DATE")
     orders      OrderItem[]
 
     @@map("products")
@@ -61,7 +61,7 @@ model Order {
     shipAddress Int             @db.Int                         @map("ORD_SHIP_ADDR")
     status      OrderStatus     @default(PENDING)               @map("ORD_STATUS")
     createdAt   DateTime        @default(now())                 @map("ORD_REG_DATE")
-    updatedAt   DateTime?       @db.DateTime                    @map("ORD_UPD_DATE")
+    updatedAt   DateTime?       @db.DateTime   @updatedAt       @map("ORD_UPD_DATE")
     products    OrderItem[]
     seller      User            @relation(fields: [userNiu], references: [niu], map: "USER_ORDER_FK")
     client      Client          @relation(fields: [clientNiu], references: [niu], map: "CLIENT_ORDER_FK")
@@ -94,7 +94,7 @@ model User {
     isOnline    Boolean         @default(false)                 @map("USR_STATUS")
     initDay     DateTime?       @db.DateTime                    @map("USR_INIT_DAY")
     createdAt   DateTime        @default(now())                 @map("USR_REG_DATE")
-    updatedAt   DateTime?       @updatedAt                      @map("USR_UPD_DATE")
+    updatedAt   DateTime?       @db.DateTime   @updatedAt       @map("USR_UPD_DATE")
     telephones  Telephone[]
     addresses   Address[]
     orders      Order[]
@@ -108,8 +108,9 @@ model Client {
     fullname    String      @db.VarChar(100)                @map("CLI_NAME")
     birthday    DateTime?   @db.Date                        @map("CLI_BIRTHDAY")
     email       String?     @db.VarChar(100)                @map("CLI_EMAIL")  @unique(map:"CLI_EMAIL_UNIQUE_INDEX")
+    isBlocked   Boolean     @default(false)                 @map("CLI_IS_BLOCKED")
     createdAt   DateTime    @default(now())                 @map("CLI_REG_DATE")
-    updatedAt   DateTime?   @updatedAt                      @map("CLI_UPD_DATE")
+    updatedAt   DateTime?   @db.DateTime   @updatedAt       @map("CLI_UPD_DATE")
     telephones  Telephone[]
     addresses   Address[]
     orders      Order[]
@@ -119,7 +120,7 @@ model Client {
 
 model Address {
     id          Int             @id @default(autoincrement())   @map("ADR_ID")
-    addressLine String          @db.VarChar(100)                @map("ADR_DESC")
+    address     String          @db.VarChar(100)                @map("ADR_DESC")
     zip         String?         @db.VarChar(10)                 @map("ADR_ZIP")
     city        String          @db.VarChar(50)                 @map("ADR_CITY")
     state       String          @db.VarChar(50)                 @map("ADR_STATE")
@@ -129,7 +130,7 @@ model Address {
     clientNiu   String?         @db.VarChar(10)                 @map("ADR_CLI_NIU")
     isPrimary   Boolean         @default(false)                 @map("ADR_PRIMARY")
     createdAt   DateTime        @default(now())                 @map("ADR_REG_DATE")
-    updatedAt   DateTime?       @db.DateTime                    @map("ADR_UPD_DATE")
+    updatedAt   DateTime?       @db.DateTime   @updatedAt       @map("ADR_UPD_DATE")
     orders      Order[]
     user        User?           @relation(fields:[userNiu], references: [niu], map: "USER_ADDRESSES_FK", onDelete: NoAction, onUpdate: Cascade)
     client      Client?         @relation(fields:[clientNiu], references: [niu], map: "CLIENT_ADDRESSES_FK", onDelete: NoAction, onUpdate: Cascade)
@@ -144,7 +145,7 @@ model Telephone {
     userNiu     String?         @db.VarChar(10)                 @map("TEL_USR_NIU")
     clientNiu   String?         @db.VarChar(10)                 @map("TEL_CLI_NIU")
     createdAt   DateTime        @default(now())                 @map("TEL_REG_DATE")
-    updatedAt   DateTime?       @db.DateTime                    @map("TEL_UPD_DATE")
+    updatedAt   DateTime?       @db.DateTime   @updatedAt       @map("TEL_UPD_DATE")
     user        User?           @relation(fields:[userNiu], references: [niu], map: "USER_TELEPHONES_FK", onDelete: NoAction, onUpdate: Cascade)
     client      Client?         @relation(fields:[clientNiu], references: [niu], map: "CLIENT_TELEPHONES_FK", onDelete: NoAction, onUpdate: Cascade)
 

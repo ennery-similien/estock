@@ -1,4 +1,4 @@
-const UserDataProvider = require("../../dataproviders/UserDataProvider");
+const {UserDataProvider} = require("../../dataproviders");
 const QueryParams = require("../../../utilities/QueryParams");
 
 class GetAllUserUseCase

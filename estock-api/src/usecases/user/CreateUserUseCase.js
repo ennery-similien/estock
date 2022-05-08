@@ -1,9 +1,10 @@
-const UserDataProvider = require("../../dataproviders/UserDataProvider");
-const {isHumanName, isNumeric, isSameDigitSequence, isAdult, isEmail, Regexp} = require('../../../utilities');
+const {UserDataProvider} = require("../../dataproviders");
+const {isHumanName, isAdult, isEmail, Regexp} = require('../../../utilities');
 const DateUtils = require("../../../utilities/DateUtils");
 const {REGEX_PASSWORD, PASSWORD_OPTIONS} = require("../../../utilities/constants");
-const {Role, AddressType, PhoneType} = require("../../../utilities/enumerations");
+const {Role} = require("../../../utilities/enumerations");
 const passwordHash = require('password-hash');
+const {validateAddress, validateTelephone, validateNiu} = require("../../../utilities/validator");
 
 class CreateUserUseCase {
 
@@ -46,13 +47,9 @@ class CreateUserUseCase {
 
     static #checkUserNiu(niu)
     {
-        if(!niu  || !isNumeric(niu) || niu.length !== 10)
-            throw new Error('Invalid Unique Identity Number, must be only digit[0-9]');
+        validateNiu(niu);
 
-        if(isSameDigitSequence(niu))
-            throw new Error('Invalid NIU sequence');
-
-        //TODO orther verifications here
+        //TODO other verifications here
     }
 
     static #checkUserFullName(firstname, lastname)
@@ -90,13 +87,7 @@ class CreateUserUseCase {
         if(telephones.length <= 0)
             throw new Error('User must contain at least one telephone');
 
-        telephones.forEach(phone => {
-            if(phone.number.length !== 8 || !isNumeric(phone.number))
-                throw new Error('Invalid phone number, must contain 8 digits');
-
-            if(!phone.type)
-                phone.type = PhoneType.RESIDENTIAL;
-        });
+        telephones.forEach(telephone => validateTelephone(telephone));
     }
 
     static #checkAddresses(addresses)
@@ -104,14 +95,7 @@ class CreateUserUseCase {
         if(addresses.length <= 0)
             throw new Error('User must contain at least one address');
 
-        addresses.forEach(address => {
-
-            if(!address.addressLine || !address.city || !address.state)
-                throw new Error('Invalid address, please enter a correct address');
-
-            if(!address.type)
-                address.type = AddressType.RESIDENTIAL;
-        });
+        addresses.forEach(address => validateAddress(address));
 
         if(!addresses.find(address => address.isPrimary === true))
             addresses[0].isPrimary = true

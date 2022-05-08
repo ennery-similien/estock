@@ -1,4 +1,4 @@
-const UserDataProvider = require("../../dataproviders/UserDataProvider");
+const {UserDataProvider} = require("../../dataproviders");
 
 class GetUserByIdUseCase {
     static process(userId)

@@ -1,13 +1,13 @@
 const {isNumeric} = require("../../../utilities");
-const {UserDataProvider} = require("../../dataproviders");
+const {ClientDataProvider} = require("../../dataproviders");
 
-class GetUserByNiuUseCase {
+class GetClientByNiuUseCase {
 
     static process(userNiu)
     {
-        GetUserByNiuUseCase.#checkUserNiu(userNiu);
+        GetClientByNiuUseCase.#checkUserNiu(userNiu);
 
-        return UserDataProvider.getUserByNiu(userNiu);
+        return ClientDataProvider.getClientByNiu(userNiu);
     }
 
     static #checkUserNiu(userNiu)
@@ -20,4 +20,4 @@ class GetUserByNiuUseCase {
     }
 }
 
-module.exports = GetUserByNiuUseCase;
+module.exports = GetClientByNiuUseCase;

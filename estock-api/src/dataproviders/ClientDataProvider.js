@@ -1,16 +1,16 @@
 const {mysqlBdConnection} = require('../../database');
 
-class UserDataProvider
+class ClientDataProvider
 {
-    static async createUser(user){
-        const createdUser = await mysqlBdConnection.user.create({
+    static async createClient(client){
+        const createdClient = await mysqlBdConnection.client.create({
             data: {
-                ...user,
+                ...client,
                 telephones:{
-                    create: user.telephones
+                    create: client.telephones
                 },
                 addresses:{
-                    create: user.addresses
+                    create: client.addresses
                 }
             },
             include:{
@@ -19,17 +19,17 @@ class UserDataProvider
             }
         });
 
-        if(!createdUser)
-            throw new Error('An error occurred, user not created')
+        if(!createdClient)
+            throw new Error('An error occurred, client not created')
 
-        return createdUser;
+        return createdClient;
     }
 
-    static getUserById(userId)
+    static getClientById(clientId)
     {
-        return mysqlBdConnection.user.findUnique({
+        return mysqlBdConnection.client.findUnique({
             where : {
-                id : userId
+                id : clientId
             },
             include: {
                 telephones: true,
@@ -38,11 +38,11 @@ class UserDataProvider
         });
     }
 
-    static getUserByNiu(userNIU)
+    static getClientByNiu(clientNIU)
     {
-        return mysqlBdConnection.user.findUnique({
+        return mysqlBdConnection.client.findUnique({
             where : {
-                niu : userNIU
+                niu : clientNIU
             },
             include: {
                 telephones: true,
@@ -51,29 +51,29 @@ class UserDataProvider
         });
     }
 
-    static async updateUserById(userId, data)
+    static async updateClientById(clientId, data)
     {
-        return await mysqlBdConnection.user.update({
+        return await mysqlBdConnection.client.update({
             data,
             where : {
-                id : userId
+                id : clientId
             }
         });
     }
 
-    static async updateUserByNiu(userNIU, data)
+    static async updateClientByNiu(clientNIU, data)
     {
-        return await mysqlBdConnection.user.update({
+        return await mysqlBdConnection.client.update({
             data,
             where : {
-                niu : userNIU
+                niu : clientNIU
             }
         });
     }
 
-    static async getAllUser(regex)
+    static async getAllClient(regex)
     {
-        return await mysqlBdConnection.user.findMany({
+        return await mysqlBdConnection.client.findMany({
             ...regex,
             // include:{
             //     telephones: true,
@@ -82,9 +82,9 @@ class UserDataProvider
         });
     }
 
-    // static async getAllUser(regex)
+    // static async getAllClient(regex)
     // {
-    //     return await mysqlBdConnection.user.findMany({
+    //     return await mysqlBdConnection.client.findMany({
     //         include:{
     //             telephones: true,
     //             addresses: true,
@@ -96,7 +96,7 @@ class UserDataProvider
     //                             product:true
     //                         }
     //                     },
-    //                     client: true
+    //                     seller: true
     //                 }
     //             }
     //         }
@@ -105,4 +105,4 @@ class UserDataProvider
 }
 
 
-module.exports = UserDataProvider
+module.exports = ClientDataProvider

@@ -10,46 +10,44 @@ class QueryParams
     }
 
     skip(skip) {
-        this.queryParams.skip = Number.parseInt(skip);
+        if(skip)
+            this.queryParams.skip = Number.parseInt(skip);
 
         return this;
     }
 
     take(take) {
-        this.queryParams.take = Number.parseInt(take);
+        if(take)
+            this.queryParams.take = Number.parseInt(take);
 
         return this;
     }
 
     orderBy(orderBy) {
-        this.queryParams.orderBy = this.#generateOrderBy(orderBy);
-
-        return this;
-    }
-
-    having(having){
-        this.queryParams.having = having;
+        if(orderBy)
+            this.queryParams.orderBy = this.#generateOrderBy(orderBy);
 
         return this;
     }
 
     where(where){
+        if(where) {
+            if (this.#getConjunction() === 'OR')
+                this.queryParams.where = {OR: this.#generateWhere(where)};
 
-        if(this.#getConjunction() === 'OR')
-            this.queryParams.where = {OR: this.#generateWhere(where)};
+            else if (this.#getConjunction() === 'NOT')
+                this.queryParams.where = {NOT: this.#generateWhere(where)};
 
-        else if(this.#getConjunction() === 'NOT')
-            this.queryParams.where = {NOT: this.#generateWhere(where)};
-
-        else
-            this.queryParams.where = {AND: this.#generateWhere(where)};
-
+            else
+                this.queryParams.where = {AND: this.#generateWhere(where)};
+        }
         return this;
     }
 
     whereConjunctions(conjunction)
     {
-        this.conjunction  = conjunction.toUpperCase();
+        if(conjunction)
+            this.conjunction  = conjunction.toUpperCase();
 
         return this;
     }
