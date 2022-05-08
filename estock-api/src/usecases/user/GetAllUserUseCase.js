@@ -9,7 +9,6 @@ class GetAllUserUseCase
             .skip(params.skip)
             .take(params.take)
             .orderBy(params.orderBy)
-            .having(params.having)
             .whereConjunctions(params.conjunction)
             .where(params.where)
             .build();
