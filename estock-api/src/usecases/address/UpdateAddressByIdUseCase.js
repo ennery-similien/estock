@@ -1,15 +1,12 @@
 const {isObjectEmpty} = require("../../../utilities");
 const {AddressDataProvider} = require("../../dataproviders");
 
-class UpdateAddressByIdUseCase {
-    static async process(addressId, data, callback) {
+class UpdateAddressByIdUseCase
+{
+    static async process(addressId, data) {
         const id = Number.parseInt(addressId);
 
         UpdateAddressByIdUseCase.#checkAddressId(id);
-
-        if (!await UpdateAddressByIdUseCase.#addressExists(id))
-            callback(new Error('Address does not exist'));
-
         UpdateAddressByIdUseCase.#checkAddressData(data);
 
         return AddressDataProvider.updateAddressById(id, data);
@@ -21,18 +18,10 @@ class UpdateAddressByIdUseCase {
     }
 
     static #checkAddressData(data) {
+        delete data.owner;
+
         if (isObjectEmpty(data))
             throw new Error('Cannot update address with empty data');
-
-        delete data.userNiu;
-        delete data.clientNiu;
-    }
-
-    static #addressExists(addressId) {
-        return AddressDataProvider.getAddressById(addressId)
-            .then(address => {
-                return !!address;
-            });
     }
 }
 

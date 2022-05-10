@@ -15,8 +15,7 @@ class GetAllAddressUseCase
 
         if(params.include)
             queryParams.include = {
-                user: true,
-                client: true
+                owner: true
             }
 
         return AddressDataProvider.getAllAddress(queryParams);

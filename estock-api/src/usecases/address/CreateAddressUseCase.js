@@ -1,46 +1,22 @@
 const {AddressDataProvider} = require("../../dataproviders");
 const {validateAddress, validateNiu} = require("../../../utilities/validator");
-const {userExistsOnNiu, clientExistsOnNiu} = require("../helper");
 
 class CreateAddressUseCase {
 
-    static process(address, callback)
+    static process(address)
     {
         validateAddress(address);
-        CreateAddressUseCase.#checkAddressOwner(address, callback)
+        CreateAddressUseCase.#checkAddressOwner(address.owner)
 
         return AddressDataProvider.createAddress(address);
     }
 
-    static #checkAddressOwner(address, callback) {
+    static #checkAddressOwner(owner) {
 
-        if (!address.userNiu && !address.clientNiu)
+        if (!owner)
             throw new Error('Address cannot exist without owner');
 
-        CreateAddressUseCase.#userExists(address.userNiu, callback)
-            .then();
-        CreateAddressUseCase.#clientExits(address.clientNiu, callback)
-            .then();
-    }
-
-    static async #userExists(userNiu, callback)
-    {
-        if (userNiu) {
-            validateNiu(userNiu);
-
-            if(!await userExistsOnNiu(userNiu))
-                callback(new Error('Address owner does not exist'));
-        }
-    }
-
-    static  async #clientExits(clientNiu, callback)
-    {
-        if (clientNiu) {
-            validateNiu(clientNiu);
-
-            if(!await clientExistsOnNiu(clientNiu))
-                callback(new Error('Address owner does not exist'));
-        }
+        validateNiu(owner);
     }
 }
 

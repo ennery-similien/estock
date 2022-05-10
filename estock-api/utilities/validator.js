@@ -1,5 +1,5 @@
-const {AddressType, PhoneType} = require("./enumerations");
-const {isNumeric, isSameDigitSequence} = require("./index");
+const {AddressPhoneType} = require("@prisma/client");
+const {isNumeric, isSameDigitSequence, isObjectEmpty} = require("./index");
 module.exports = {
     validateAddress(address)
     {
@@ -7,15 +7,18 @@ module.exports = {
             throw new Error('Invalid address, please enter a correct address');
 
         if(!address.type)
-            address.type = AddressType.RESIDENTIAL
+            address.type = AddressPhoneType.RESIDENTIAL
     },
     validateTelephone(telephone)
     {
+        if(isObjectEmpty(telephone))
+            throw new Error("Telephone must contain a valid phone number");
+
         if(telephone.number.length !== 8 || !isNumeric(telephone.number))
             throw new Error('Invalid phone number, must contain 8 digits');
 
         if(!telephone.type)
-            telephone.type = PhoneType.RESIDENTIAL;
+            telephone.type = AddressPhoneType.RESIDENTIAL;
     },
     validateNiu(niu)
     {

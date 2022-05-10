@@ -1,16 +1,11 @@
 const {UserDataProvider} = require("../../dataproviders");
 const {isObjectEmpty} = require("../../../utilities");
-const {userExistsOnId} = require("../helper");
 
 class UpdateUserByIdUseCase {
-    static async process(userId, data, callback) {
+    static process(userId, data) {
         const id = Number.parseInt(userId);
 
         UpdateUserByIdUseCase.#checkUserId(id);
-
-        if (!await userExistsOnId(id))
-            callback(new Error('User does not exist'));
-
         UpdateUserByIdUseCase.#checkData(data);
 
         return UserDataProvider.updateUserById(id, data);
