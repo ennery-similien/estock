@@ -2,9 +2,9 @@ const {UserDataProvider} = require("../../dataproviders");
 const {isHumanName, isAdult, isEmail, Regexp} = require('../../../utilities');
 const DateUtils = require("../../../utilities/DateUtils");
 const {REGEX_PASSWORD, PASSWORD_OPTIONS} = require("../../../utilities/constants");
-const {Role} = require("../../../utilities/enumerations");
 const passwordHash = require('password-hash');
 const {validateAddress, validateTelephone, validateNiu} = require("../../../utilities/validator");
+const {Role} = require("@prisma/client");
 
 class CreateUserUseCase {
 

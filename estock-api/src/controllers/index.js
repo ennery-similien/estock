@@ -1,12 +1,12 @@
 const UserController = require("./user");
 const ProductController = require("./product");
-const ClientController = require('./client');
 const AddressController = require("./address");
+const TelephoneController = require("./telephone");
 
 
 module.exports = {
     UserController,
-    ClientController,
     ProductController,
     AddressController,
+    TelephoneController,
 }

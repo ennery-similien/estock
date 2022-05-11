@@ -1,16 +1,14 @@
 const {
     CreateUserUseCase,
     GetUserByIdUseCase,
-    GetUserByNiuUseCase,
     GetAllUserUseCase,
     UpdateUserByIdUseCase,
-    UpdateUserByNiuUseCase
 } = require('../../usecases');
 
 const Index = require("../../../utilities/enumIndex");
 const Response = require('../../output/Response');
-const {error401} = require("../../../utilities/errorUtil");
-const {CODE_200, SUCCESS_MESSAGE, MANY_401_MESSAGE} = require('../../../utilities/constants');
+const {Error401} = require("../../../utilities/errorUtil");
+const {CODE_200, SUCCESS_MESSAGE, MANY_401_MESSAGE, SINGLE_401_MESSAGE} = require('../../../utilities/constants');
 
 class UserController
 {
@@ -37,20 +35,9 @@ class UserController
                 if(user !== null)
                     response.send(new Response(CODE_200, SUCCESS_MESSAGE('Get user'), user));
                 else
-                    next(error401(`User [id: ${userId}]`));
-            });
-    }
-
-    static getUserByNiu(request, response, next)
-    {
-        const userNIU = request.params.userNIU;
-        GetUserByNiuUseCase.process(userNIU)
-            .then(user => {
-                if(user !== null)
-                    response.send(new Response(CODE_200, SUCCESS_MESSAGE('Get user'), user));
-                else
-                    next(error401(`User [NIU: ${userNIU}]`));
-            });
+                    response.send(new Response(CODE_200, SINGLE_401_MESSAGE('User'), user));
+            })
+            .catch(error => { next(error); })
     }
 
     static getAll(request, response, next)
@@ -74,29 +61,14 @@ class UserController
         const userId = request.params.userId;
         const data = request.body;
 
-        UpdateUserByIdUseCase.process(userId, data, next)
+        UpdateUserByIdUseCase.process(userId, data)
             .then(updatedUser => {
                 response.send(
                     new Response(CODE_200, SUCCESS_MESSAGE('Update user'), updatedUser)
                 );
             })
             .catch(error => {
-                console.log(error);
-            })
-    }
-
-    static updateUserByNiu(request, response, next)
-    {
-        const userNiu = request.params.userNiu;
-        const data = request.body;
-        UpdateUserByNiuUseCase.process(userNiu, data, next)
-            .then(updatedUser => {
-                response.send(
-                    new Response(CODE_200, SUCCESS_MESSAGE('Update user'), updatedUser)
-                );
-            })
-            .catch(error => {
-                next(error);
+                error.code === 'P2025' ? next(Error401("User to update")) : next(error);
             })
     }
 }
