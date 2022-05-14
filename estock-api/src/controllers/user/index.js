@@ -56,6 +56,38 @@ class UserController
             })
     }
 
+    static getCompleteUser(request, response, next)
+    {
+        GetAllUserUseCase.process(request.query, )
+            .then(users => {
+                let message = SUCCESS_MESSAGE('Get users');
+
+                if(users.length <= 0)
+                    message = MANY_401_MESSAGE('users');
+
+                response.send(new Response(CODE_200, message, users))
+            })
+            .catch(error => {
+                next(error);
+            })
+    }
+
+    static getCompleteUserWithoutOrders(request, response, next)
+    {
+        GetAllUserUseCase.process(request.query)
+            .then(users => {
+                let message = SUCCESS_MESSAGE('Get users');
+
+                if(users.length <= 0)
+                    message = MANY_401_MESSAGE('users');
+
+                response.send(new Response(CODE_200, message, users))
+            })
+            .catch(error => {
+                next(error);
+            })
+    }
+
     static updateUserById(request, response, next)
     {
         const userId = request.params.userId;

@@ -24,6 +24,16 @@ const GetTelephoneByOwnerUseCase = require('./telephone/GetTelephoneByOwnerUseCa
 const GetAllTelephoneUseCase = require('./telephone/GetAllTelephoneUseCase');
 const UpdateTelephoneByIdUseCase = require('./telephone/UpdateTelephoneByIdUseCase');
 
+
+/**
+ * @description all product use case
+ */
+
+const CreateProductUseCase = require('./product/CreateProductUseCase');
+const GetProductByBarcodeUseCase = require('./product/GetProductByBarcodeUseCase');
+const GetAllProductsUseCase = require('./product/GetAllProductsUseCase');
+const UpdateProductByBarcodeUseCase = require('./product/UpdateProductByBarcodeUseCase');
+
 module.exports = {
     CreateUserUseCase,
     GetUserByIdUseCase,
@@ -36,5 +46,9 @@ module.exports = {
     CreateTelephoneUseCase,
     GetTelephoneByOwnerUseCase,
     GetAllTelephoneUseCase,
-    UpdateTelephoneByIdUseCase
+    UpdateTelephoneByIdUseCase,
+    CreateProductUseCase,
+    GetProductByBarcodeUseCase,
+    GetAllProductsUseCase,
+    UpdateProductByBarcodeUseCase,
 }
