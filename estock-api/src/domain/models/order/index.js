@@ -10,9 +10,9 @@ class Order extends ClassConverter
         this.user = null;
         this.client = null;
         this.total = null;
-        this.econimy = null;
+        this.economy = null;
         this.status = null;
-        this.products = []
+        this.items = []
     }
 }
 

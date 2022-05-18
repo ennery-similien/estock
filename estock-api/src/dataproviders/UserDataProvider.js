@@ -110,6 +110,16 @@ class UserDataProvider {
         });
 
     }
+
+    static async userExists(userNiu) {
+        const user = await mysqlBdConnection.user.findUnique({
+            where: {
+                niu: userNiu
+            }
+        });
+
+        return user !== null;
+    }
 }
 
 module.exports = UserDataProvider

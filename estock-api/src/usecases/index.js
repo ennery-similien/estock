@@ -34,6 +34,14 @@ const GetProductByBarcodeUseCase = require('./product/GetProductByBarcodeUseCase
 const GetAllProductsUseCase = require('./product/GetAllProductsUseCase');
 const UpdateProductByBarcodeUseCase = require('./product/UpdateProductByBarcodeUseCase');
 
+
+/**
+ *
+ * @description all order use case
+ */
+
+const CreateOrderUseCase = require('./order/CreateOrderUseCase');
+
 module.exports = {
     CreateUserUseCase,
     GetUserByIdUseCase,
@@ -51,4 +59,5 @@ module.exports = {
     GetProductByBarcodeUseCase,
     GetAllProductsUseCase,
     UpdateProductByBarcodeUseCase,
+    CreateOrderUseCase,
 }

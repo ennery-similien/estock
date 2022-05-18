@@ -4,10 +4,11 @@ class OrderItem extends ClassConverter
 {
     constructor() {
         super();
-
-        this.id = undefined;
+        this.orderId = undefined;
         this.productId = null;
-        this.orderId = null;
+        this.actualPrice = null;
+        this.quantity = null;
+        this.total = null;
         this.discount = null;
     }
 }
