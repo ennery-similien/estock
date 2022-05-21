@@ -48,7 +48,7 @@ class UpdateUserByIdUseCase
 
     static #setUserPassword(user)
     {
-        if(!user.password) return;
+        if(!user.password || passwordHash.isHashed(user.password)) return;
 
         const hashedPassword = passwordHash.generate(user.password, PASSWORD_OPTIONS);
 

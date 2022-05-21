@@ -41,6 +41,12 @@ const UpdateProductByBarcodeUseCase = require('./product/UpdateProductByBarcodeU
  */
 
 const CreateOrderUseCase = require('./order/CreateOrderUseCase');
+const GetOrderByIdUseCase = require('./order/GetOrderByIdUseCase');
+const GetAllOrderUseCase = require('./order/GetAllOrderUseCase');
+const UpdateOrderByIdUseCase = require('./order/UpdateOrderByIdUseCase');
+const UpdateOrderAddProductUseCase = require('./order/UpdateOrderAddProductUseCase');
+const UpdateOrderRemoveProductUseCase = require('./order/UpdateOrderRemoveProductUseCase');
+const UpdateOrderItemUseCase = require('./order/UpdateOrderItemUseCase');
 
 module.exports = {
     CreateUserUseCase,
@@ -60,4 +66,10 @@ module.exports = {
     GetAllProductsUseCase,
     UpdateProductByBarcodeUseCase,
     CreateOrderUseCase,
+    GetOrderByIdUseCase,
+    GetAllOrderUseCase,
+    UpdateOrderByIdUseCase,
+    UpdateOrderAddProductUseCase,
+    UpdateOrderRemoveProductUseCase,
+    UpdateOrderItemUseCase,
 }

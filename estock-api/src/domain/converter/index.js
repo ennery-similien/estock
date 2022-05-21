@@ -6,7 +6,7 @@ class ClassConverter
     {
         for(const [key, value] of Object.entries(inputData))
             if(this.#keyExits(key))
-                this[key] = this.#valueExits(value) ? value : null;
+                this[key] = this.#valueExits(value) ? value : undefined;
         return this;
     }
 
@@ -18,6 +18,7 @@ class ClassConverter
     #valueExits(value)
     {
         if(typeof value === 'boolean') return true;
+        if(typeof value === 'number') return true;
 
         if(!value) return false;
 
