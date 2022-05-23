@@ -3,6 +3,7 @@ const {validateNiu, validateTelephone, validateAddress} = require("../../../util
 const {isHumanName, isAdult, isEmail, Regexp} = require("../../../utilities");
 const DateUtils = require("../../../utilities/DateUtils");
 const {REGEX_PASSWORD} = require("../../../utilities/constants");
+const passwordHash = require("password-hash");
 
 class UserValidator
 {
@@ -70,7 +71,7 @@ class UserValidator
 
     static #checkPassword(password)
     {
-        if(!password) return;
+        if(!password || passwordHash.isHashed(password)) return;
 
         if(!password || password.length < 10 || !Regexp(REGEX_PASSWORD).test(password))
             throw new Error('Password must contain 10-15 characters, at least 1 uppercase, one lowercase, 1 number and 1 special character');

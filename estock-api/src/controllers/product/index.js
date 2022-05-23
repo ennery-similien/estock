@@ -19,7 +19,6 @@ class ProductController {
                 response.send(new Response(CODE_200, SUCCESS_MESSAGE("Create product"), product));
             })
             .catch(error => {
-                console.log(error)
                 if (error.meta?.target === Index.PRO_BARCODE_UNIQUE_INDEX)
                     next(new Error("Product barcode already exists, please create new barcode"));
                 else

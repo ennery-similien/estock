@@ -91,6 +91,7 @@ model User {
     isActive    Boolean         @default(false)                 @map("USR_IS_ACTIVE")
     isOnline    Boolean         @default(false)                 @map("USR_STATUS")
     initDay     DateTime?       @db.DateTime                    @map("USR_INIT_DAY")
+    token       String?         @db.VarChar(255)                @map("USR_TOKEN") @unique(map:"USR_TOKEN_UNIQUE_INDEX")
     createdAt   DateTime        @default(now())                 @map("USR_REG_DATE")
     updatedAt   DateTime?       @db.DateTime   @updatedAt       @map("USR_UPD_DATE")
     telephones  Telephone[]

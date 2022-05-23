@@ -12,7 +12,7 @@ const {CODE_200, SUCCESS_MESSAGE, MANY_401_MESSAGE, SINGLE_401_MESSAGE} = requir
 
 class UserController
 {
-    static createUser(request, response, next)
+    createUser(request, response, next)
     {
         CreateUserUseCase.process(request.body)
             .then(createdUser =>{
@@ -27,7 +27,7 @@ class UserController
 
     }
 
-    static getUserById(request, response, next)
+    getUserById(request, response, next)
     {
         const userId = Number.parseInt(request.params.userId);
         GetUserByIdUseCase.process(userId)
@@ -40,7 +40,7 @@ class UserController
             .catch(error => { next(error); })
     }
 
-    static getAll(request, response, next)
+    getAll(request, response, next)
     {
         GetAllUserUseCase.process(request.query)
             .then(users => {
@@ -56,7 +56,7 @@ class UserController
             })
     }
 
-    static getCompleteUser(request, response, next)
+    getCompleteUser(request, response, next)
     {
         GetAllUserUseCase.process(request.query, )
             .then(users => {
@@ -72,7 +72,7 @@ class UserController
             })
     }
 
-    static getCompleteUserWithoutOrders(request, response, next)
+    getCompleteUserWithoutOrders(request, response, next)
     {
         GetAllUserUseCase.process(request.query)
             .then(users => {
@@ -88,7 +88,7 @@ class UserController
             })
     }
 
-    static updateUserById(request, response, next)
+    updateUserById(request, response, next)
     {
         const userId = request.params.userId;
         const data = request.body;

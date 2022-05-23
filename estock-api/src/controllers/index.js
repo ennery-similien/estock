@@ -3,6 +3,7 @@ const ProductController = require("./product");
 const AddressController = require("./address");
 const TelephoneController = require("./telephone");
 const OrderController = require("./order");
+const LoginController = require("./login");
 
 
 module.exports = {
@@ -11,4 +12,5 @@ module.exports = {
     AddressController,
     TelephoneController,
     OrderController,
+    LoginController,
 }

@@ -48,6 +48,8 @@ const UpdateOrderAddProductUseCase = require('./order/UpdateOrderAddProductUseCa
 const UpdateOrderRemoveProductUseCase = require('./order/UpdateOrderRemoveProductUseCase');
 const UpdateOrderItemUseCase = require('./order/UpdateOrderItemUseCase');
 
+const LoginUseCase = require('./login/LoginUseCase');
+
 module.exports = {
     CreateUserUseCase,
     GetUserByIdUseCase,
@@ -72,4 +74,5 @@ module.exports = {
     UpdateOrderAddProductUseCase,
     UpdateOrderRemoveProductUseCase,
     UpdateOrderItemUseCase,
+    LoginUseCase,
 }

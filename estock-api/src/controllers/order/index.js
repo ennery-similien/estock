@@ -116,7 +116,6 @@ class OrderController
                 )
             })
             .catch(error => {
-                console.log(error)
                 error.code === 'P2025' ? next(Error401("Order to update")) : next(error);
             })
     }
