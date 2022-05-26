@@ -1,7 +1,9 @@
 const Authentication = require("./role/Authentication");
-
+const {notFoundError, error} = require("./errorHandler");
 
 
 module.exports = {
-    Authentication
+    Authentication,
+    notFoundError,
+    error
 }
