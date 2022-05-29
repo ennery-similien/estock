@@ -3,3 +3,5 @@
 .dockerignore
 .gitignore
 .idea
+/estock-app/node_modules
+/estock-app/.gitignore
