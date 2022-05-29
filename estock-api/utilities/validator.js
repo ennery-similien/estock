@@ -1,24 +1,26 @@
-const {AddressPhoneType} = require("@prisma/client");
 const {isNumeric, isSameDigitSequence, isObjectEmpty} = require("./index");
 module.exports = {
     validateAddress(address)
     {
-        if(!address.address || !address.city || !address.state)
-            throw new Error('Invalid address, please enter a correct address');
+        if(!address.address)
+            throw new Error('Invalid address line, cannot be empty or null');
 
-        if(!address.type)
-            address.type = AddressPhoneType.RESIDENTIAL
+        if(!address.city)
+            throw new Error('Invalid city, cannot be empty or null');
+
+        if(!address.state)
+            throw new Error('Invalid state, cannot be empty or null');
     },
     validateTelephone(telephone)
     {
         if(isObjectEmpty(telephone))
             throw new Error("Telephone must contain a valid phone number");
 
+        if(telephone.number === null)
+            throw new Error("Telephone number must not be null");
+
         if(telephone.number.length !== 8 || !isNumeric(telephone.number))
             throw new Error('Invalid phone number, must contain 8 digits');
-
-        if(!telephone.type)
-            telephone.type = AddressPhoneType.RESIDENTIAL;
     },
     validateNiu(niu)
     {
@@ -30,5 +32,15 @@ module.exports = {
 
         if(isSameDigitSequence(niu))
             throw new Error('Invalid NIU sequence');
+    },
+    validateUniqueId(input)
+    {
+        if(input.id !== undefined)
+            throw new Error("[Invalid Argument]: Cannot set auto generate unique key, id must be undefined");
+    },
+    validateData(data, message)
+    {
+        if(data === null || data === undefined)
+            throw new Error(`[Invalid Value]: ${message}`);
     }
 }

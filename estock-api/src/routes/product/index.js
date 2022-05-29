@@ -1,11 +1,9 @@
 const router = require('../router')
 const ProductController = require("../../controllers/product");
 
-router.post('/product/create', ProductController.createProduct)
-router.get('/product/get/:productId', ProductController.getProductById)
-router.get('/product/getall', ProductController.getAll)
-router.get('/product/getall/:type', ProductController.getAllByRegex)
-router.patch('/product/update/:productId', ProductController.updateProduct)
-router.patch('/product/update/:type', ProductController.updateAllByRegex)
-router.delete('/product/delete/:productId', ProductController.deleteProduct)
-router.delete('/product/delete/:type', ProductController.deleteAllByRegex)
+router.route("/product/create").post(ProductController.createProduct);
+//router.route("/product/get/:productId").get(ProductController.getProductById);
+router.route("/product/get/barcode/:barcode").get(ProductController.getProductByBarcode);
+router.route("/product/getall").get(ProductController.getAllProducts);
+//router.route("/product/update/:productId").patch(ProductController.updateProductById);
+router.route("/product/update/barcode/:barcode").patch(ProductController.updateProductByBarcode);

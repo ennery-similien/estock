@@ -4,10 +4,11 @@ class GetUserByIdUseCase {
     static process(userId)
     {
         const id = Number.parseInt(userId);
+        const excludeFilter = ["createdAt", "updatedAt", "password"];
 
         GetUserByIdUseCase.#checkUserId(id);
 
-        return UserDataProvider.getUserById(id);
+        return UserDataProvider.getUserById(id, excludeFilter);
     }
 
     static #checkUserId(userId)

@@ -1,14 +1,28 @@
 const {UserDataProvider} = require("../../dataproviders");
-const {isObjectEmpty} = require("../../../utilities");
+const {isObjectEmpty, objectKeyExits} = require("../../../utilities");
+const passwordHash = require("password-hash");
+const {PASSWORD_OPTIONS} = require("../../../utilities/constants");
+const UserValidator = require("./UserValidator");
 
-class UpdateUserByIdUseCase {
-    static process(userId, data) {
+class UpdateUserByIdUseCase
+{
+    static async process(userId, data)
+    {
         const id = Number.parseInt(userId);
+        const excludeFilter = ["createdAt", "updatedAt"];
 
-        UpdateUserByIdUseCase.#checkUserId(id);
-        UpdateUserByIdUseCase.#checkData(data);
+        this.#checkUserId(id);
+        this.#checkData(data);
 
-        return UserDataProvider.updateUserById(id, data);
+        const user = await UserDataProvider.getUserById(id, excludeFilter);
+
+        this.#setNewValues(user, data);
+
+        new UserValidator().validate(user);
+
+        this.#setUserPassword(user);
+
+        return UserDataProvider.updateUserById(user, excludeFilter);
     }
 
     static #checkUserId(userId)
@@ -23,6 +37,26 @@ class UpdateUserByIdUseCase {
             throw new Error('Cannot update user with empty data');
     }
 
+    static #setNewValues(user, data)
+    {
+        for(const [key, value] of Object.entries(data))
+            if(objectKeyExits(user, key))
+                user[key] =  value;
+
+        return user;
+    }
+
+    static #setUserPassword(user)
+    {
+        if(!user.password || passwordHash.isHashed(user.password)) return;
+
+        const hashedPassword = passwordHash.generate(user.password, PASSWORD_OPTIONS);
+
+        if(!passwordHash.isHashed(hashedPassword))
+            throw new Error("An error occurred while hashing the password");
+
+        user.password = hashedPassword;
+    }
 }
 
 module.exports = UpdateUserByIdUseCase;

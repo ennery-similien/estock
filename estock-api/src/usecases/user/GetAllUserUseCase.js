@@ -5,6 +5,8 @@ class GetAllUserUseCase
 {
     static process(params)
     {
+        const excludeFilter = ["createdAt", "updatedAt", "password"];
+
         const regex = QueryParams.builder()
             .skip(params.skip)
             .take(params.take)
@@ -13,7 +15,7 @@ class GetAllUserUseCase
             .where(params.where)
             .build();
 
-        return UserDataProvider.getAllUser(regex);
+        return UserDataProvider.getAllUser(regex, excludeFilter);
     }
 }
 

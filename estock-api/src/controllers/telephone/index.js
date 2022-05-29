@@ -7,14 +7,17 @@ const {
 const {CODE_200, MANY_401_MESSAGE, SUCCESS_MESSAGE} = require("../../../utilities/constants");
 const Response = require("../../output/Response");
 const {Error401} = require("../../../utilities/errorUtil");
+const {Telephone} = require("../../domain/models");
 
 class TelephoneController
 {
     static createTelephone(request, response, next)
     {
-        CreateTelephoneUseCase.process(request.body)
+        const telephone = new Telephone().from(request.body);
+
+        CreateTelephoneUseCase.process(telephone)
             .then(telephone => {
-                response.send(new Response(CODE_200, "Create telephone", telephone));
+                response.send(new Response(CODE_200, SUCCESS_MESSAGE("Create telephone"), telephone));
             })
             .catch(error => {
                 error.code === 'P2003' ?  next(Error401('Telephone owner')) : next(error);

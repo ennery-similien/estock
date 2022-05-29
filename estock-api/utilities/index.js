@@ -10,6 +10,10 @@ module.exports = {
                 Object.entries(object).length === 0 &&
                 JSON.stringify(object) === JSON.stringify({});
     },
+    objectKeyExits(object, key)
+    {
+        return object.hasOwnProperty(key);
+    },
     isNumeric(text)
     {
         return (text && Regexp(REGEX_NUMERIC).test(text));
@@ -39,6 +43,10 @@ module.exports = {
     isEmail(text)
     {
         return text && Regexp(REGEX_EMAIL).test(text.toLowerCase());
+    },
+    isString(text)
+    {
+        return typeof text === 'string' || text instanceof String;
     },
     Regexp
 }
