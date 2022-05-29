@@ -1,60 +1,125 @@
-const {mysqlBdConnection} = require('../../database');
+const {mysqlBdConnection, exclude} = require('../../database');
 
-class UserDataProvider
-{
-    static async createUser(user){
+class UserDataProvider {
+    static async createUser(user, excludeFilter) {
         return await mysqlBdConnection.user.create({
             data: {
                 ...user,
-                telephones:{
+                telephones: {
                     create: user.telephones
                 },
-                addresses:{
+                addresses: {
+                    create: user.addresses
+                },
+                orders: {
+                    create: user.orders
+                }
+            },
+            select: {
+                ...exclude("user", excludeFilter || []),
+                telephones: {
+                    select: exclude("telephone", excludeFilter || [])
+                },
+                addresses: {
+                    select: exclude("address", excludeFilter || [])
+                }
+            }
+        });
+    }
+
+    static getUserById(userId, excludeFilter) {
+        return mysqlBdConnection.user.findUnique({
+            where: {
+                id: userId
+            },
+            select: {
+                ...exclude("user", excludeFilter || []),
+                telephones: {
+                    select: exclude("telephone", excludeFilter || [])
+                },
+                addresses: {
+                    select: exclude("address", excludeFilter || [])
+                }
+            }
+        });
+    }
+
+    static async updateUserById(user, excludeFilter) {
+        return await mysqlBdConnection.user.update({
+            data: {
+                ...user,
+                telephones: {
+                    create: user.telephones
+                },
+                addresses: {
                     create: user.addresses
                 }
             },
-            include:{
-                telephones:true,
-                addresses:true
-            }
-        });
-    }
-
-    static getUserById(userId)
-    {
-        return mysqlBdConnection.user.findUnique({
-            where : {
-                id : userId
+            where: {
+                id: user.id
             },
-            include: {
-                telephones: true,
-                addresses: true
+            select: {
+                ...exclude("user", excludeFilter || []),
+                telephones: {
+                    select: exclude("telephone", excludeFilter || [])
+                },
+                addresses: {
+                    select: exclude("address", excludeFilter || [])
+                }
             }
         });
     }
 
-    static async updateUserById(userId, data)
-    {
-        return await mysqlBdConnection.user.update({
-            data,
-            where : {
-                id : userId
-            }
-        });
-    }
-
-    static async getAllUser(regex)
-    {
+    static async getAllUser(regex, excludeFilter) {
         return await mysqlBdConnection.user.findMany({
             ...regex,
-            // include:{
-            //     telephones: true,
-            //     addresses: true,
-            // }
+            select: exclude("user", excludeFilter || [])
         });
     }
 
-}
+    static async getCompleteUser(regex, excludeFilter) {
+        return await mysqlBdConnection.user.findMany({
+            ...regex,
+            select: {
+                ...exclude("user", excludeFilter || []),
+                telephones: {
+                    select: exclude("telephone", excludeFilter || [])
+                },
+                addresses: {
+                    select: exclude("address", excludeFilter || [])
+                },
+                orders: {
+                    select: exclude("order", excludeFilter || [])
+                }
+            }
+        });
+    }
 
+    static async getCompleteUserWithoutOrders(regex, excludeFilter) {
+        return await mysqlBdConnection.user.findMany({
+            ...regex,
+            select: {
+                ...exclude("user", excludeFilter || []),
+                telephones: {
+                    select: exclude("telephone", excludeFilter || [])
+                },
+                addresses: {
+                    select: exclude("address", excludeFilter || [])
+                }
+            }
+        });
+
+    }
+
+    static async userExists(userNiu) {
+        const user = await mysqlBdConnection.user.findUnique({
+            where: {
+                niu: userNiu
+            }
+        });
+
+        return user !== null;
+    }
+}
 
 module.exports = UserDataProvider

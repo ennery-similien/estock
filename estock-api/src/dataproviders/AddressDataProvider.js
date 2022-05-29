@@ -6,10 +6,7 @@ class AddressDataProvider
     {
         return await mysqlBdConnection.address.create({
             data: address,
-            include:{
-                user:true,
-                client: true
-            }
+            include:{ user:true }
         });
     }
 
@@ -22,7 +19,8 @@ class AddressDataProvider
     static async getAllAddress(regex)
     {
         return await mysqlBdConnection.address.findMany({
-            ...regex
+            ...regex,
+            include: { user: true }
             });
     }
 

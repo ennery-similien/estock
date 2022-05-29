@@ -24,6 +24,32 @@ const GetTelephoneByOwnerUseCase = require('./telephone/GetTelephoneByOwnerUseCa
 const GetAllTelephoneUseCase = require('./telephone/GetAllTelephoneUseCase');
 const UpdateTelephoneByIdUseCase = require('./telephone/UpdateTelephoneByIdUseCase');
 
+
+/**
+ * @description all product use case
+ */
+
+const CreateProductUseCase = require('./product/CreateProductUseCase');
+const GetProductByBarcodeUseCase = require('./product/GetProductByBarcodeUseCase');
+const GetAllProductsUseCase = require('./product/GetAllProductsUseCase');
+const UpdateProductByBarcodeUseCase = require('./product/UpdateProductByBarcodeUseCase');
+
+
+/**
+ *
+ * @description all order use case
+ */
+
+const CreateOrderUseCase = require('./order/CreateOrderUseCase');
+const GetOrderByIdUseCase = require('./order/GetOrderByIdUseCase');
+const GetAllOrderUseCase = require('./order/GetAllOrderUseCase');
+const UpdateOrderByIdUseCase = require('./order/UpdateOrderByIdUseCase');
+const UpdateOrderAddProductUseCase = require('./order/UpdateOrderAddProductUseCase');
+const UpdateOrderRemoveProductUseCase = require('./order/UpdateOrderRemoveProductUseCase');
+const UpdateOrderItemUseCase = require('./order/UpdateOrderItemUseCase');
+
+const LoginUseCase = require('./login/LoginUseCase');
+
 module.exports = {
     CreateUserUseCase,
     GetUserByIdUseCase,
@@ -36,5 +62,17 @@ module.exports = {
     CreateTelephoneUseCase,
     GetTelephoneByOwnerUseCase,
     GetAllTelephoneUseCase,
-    UpdateTelephoneByIdUseCase
+    UpdateTelephoneByIdUseCase,
+    CreateProductUseCase,
+    GetProductByBarcodeUseCase,
+    GetAllProductsUseCase,
+    UpdateProductByBarcodeUseCase,
+    CreateOrderUseCase,
+    GetOrderByIdUseCase,
+    GetAllOrderUseCase,
+    UpdateOrderByIdUseCase,
+    UpdateOrderAddProductUseCase,
+    UpdateOrderRemoveProductUseCase,
+    UpdateOrderItemUseCase,
+    LoginUseCase,
 }

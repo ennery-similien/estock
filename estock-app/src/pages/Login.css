@@ -1,0 +1,127 @@
+.container-fluid {
+    background-image: linear-gradient(-360deg, transparent, rgba(255, 255, 255, .2) 30%, rgba(0, 0, 0, .8) 80%), url(../../public/file.manager/images/graph.jpg);
+    background-repeat: no-repeat;
+    background-size: 100vw 100vh;
+    height: 100vh;
+    width: 100vw;
+    color: #FFFFFF;
+}
+
+.container-fluid .section-login{
+    padding-top: 5%;
+}
+
+.container-fluid .section-login .login-card{
+    height: 450px;
+    width: 350px;
+    background-color: #0B0C10;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 1px 3px 5px #C5C6C7;
+    margin: 0 auto;
+    padding: 2%;
+}
+
+#estock-logo {
+    max-height: 120px;
+    margin-bottom: 5% !important;
+}
+
+.container-fluid .section-login .login-card form .form-field {
+    margin-top: 5%;
+}
+
+.container-fluid .section-login .login-card form input {
+    height: 40px;
+    width: 90%;
+    border-radius: 5px;
+    padding: 1%;
+    border: none;
+}
+
+.container-fluid .section-login .login-card form input:focus {
+    border: 1px solid #66FCF1;
+    outline: #66FCF1;
+}
+
+.container-fluid .section-login .login-card form button#button{
+    height: 40px;
+    width: 90%;
+    border-radius: 5px;
+    padding: 1%;
+    border: none;
+    margin-top: 5%;
+    background-color: #E91E63;
+}
+
+.container-fluid .section-login .login-card form .forget-account{
+    font-size:0.7em;
+    margin: 5%;
+}
+
+.container-fluid .section-login .login-card form .forget-account a{
+    color: #E91E63;
+    text-decoration: none;
+}
+.container-fluid .header{
+    width: 70px;
+    text-align:center;
+    background-color: #E91E63;
+    border-radius:0 5px 5px 0;
+    position: fixed;
+    left: 0;
+    top: 25%;
+    box-shadow: 1px 1px 5px #C5C6C7;
+}
+
+.container-fluid .header .header-link li{
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, .5);
+    cursor: pointer;
+}
+.container-fluid .header .header-link li:last-child{
+    border: none;
+    border-radius:0 0 5px 0;
+}
+.container-fluid .header .header-link li:first-child{
+    border-radius:0 5px 0 0;
+}
+
+.container-fluid .header .header-link li:hover{
+    background-color: rgba(0, 0, 0, 1);
+    transition: background-color 1s;
+}
+.icon-contact{
+    color: #FFFFFF;
+    vertical-align: middle;
+    font-size: 30px;
+}
+.container-fluid .header .header-link li:hover .icon-contact{
+    color: #E91E63;
+    animation-duration:1s;
+    animation-name: icon-animation;
+}
+
+
+@keyframes icon-animation {
+    0% {
+        font-size: 30px;
+        color: #FFFFFF;
+    }
+    50%{
+        font-size: 50px;
+        color: #E91E63;
+    }
+    100% {
+        font-size: 30px;
+        color: #FFFFFF;
+    }
+}
+
+
+
+
+
