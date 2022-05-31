@@ -3,10 +3,6 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 
 class LoginForm extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <div className="login-card">
@@ -17,8 +13,8 @@ class LoginForm extends React.Component {
                         <p>Access account to start selling </p>
                     </div>
 
-                    <form onSubmit={this.props.handleSubmit} action="#" method="post">
-                        {this.props.fields.map(field => <Input key={field.id} fields={field}/>)}
+                    <form onSubmit={this.props.onSubmit} action="#" method="post">
+                        {this.props.fields.map(field => <Input key={field.id} fields={field} onChange={this.props.onChange}/>)}
 
                         <p className="forget-account">Forget account ? <a href="/support/accounts" target="_blank"> Contact support service</a></p>
 

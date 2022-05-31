@@ -37,11 +37,15 @@
     border-radius: 5px;
     padding: 1%;
     border: none;
+    outline: #66FCF1;
 }
 
-.container-fluid .section-login .login-card form input:focus {
-    border: 1px solid #66FCF1;
-    outline: #66FCF1;
+.container-fluid .section-login .login-card form input:invalid[focused="true"]{
+    border: 1px solid #FF0000;
+}
+
+.container-fluid .section-login .login-card form input:invalid[focused="true"]+.error{
+    display: block;
 }
 
 .container-fluid .section-login .login-card form button#button{
@@ -104,6 +108,7 @@
     animation-duration:1s;
     animation-name: icon-animation;
 }
+
 
 
 @keyframes icon-animation {

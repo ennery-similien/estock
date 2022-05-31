@@ -1,21 +1,21 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-class Input extends React.Component {
+const Input = (props) => {
 
-    constructor(props) {
-        super(props);
-    }
+    const [focused, setFocused] = useState(false);
+    const {errorMessage, ...atributes} = props.fields;
 
-    render() {
-        const {type, id, name, placeholder, value, hasError, message} = this.props.fields;
+    const handelBlur = (event) => setFocused(true);
 
-        return(
-            <div className="form-field">
-                <input type={type} name={name} id={id} value={value} placeholder={placeholder}/>
-                <span className="error">{hasError ? message : ''}</span>
-            </div>
-        );
-    }
+    return(
+        <div className="form-field">
+            <input {...atributes}
+                   onChange={props.onChange}
+                   onBlur={handelBlur}
+                   focused={focused.toString()}/>
+            <span className="error">{errorMessage}</span>
+        </div>
+    );
 }
 
 export default Input;
